@@ -755,11 +755,11 @@ function openMeet(id){
   if(past && mine && !m.logged) btn=`<button class="primary mintbtn" onclick="openLog('${m.id}')">Registar como correu</button>`;
   else if(past) btn=`<div class="badge" style="display:inline-block;">Este encontro já aconteceu</div>`;
   else if(host) btn=`<button class="ghost" style="color:var(--red);" onclick="cancelMeet('${m.id}')">Cancelar encontro</button>`;
-  if(IS_MOD && !host) btn+=`<button class="ghost" style="color:var(--red); margin-top:8px;" onclick="modDeleteMeet('${m.id}')">Apagar encontro (moderação)</button>`;
   else if(mine) btn=`<button class="ghost" onclick="leaveMeet('${m.id}')">Já não vou</button>`;
   else if((m.pending||[]).includes('me')) btn=`<div class="badge coral" style="display:inline-block; margin-bottom:6px;">À espera de aprovação</div><button class="ghost" onclick="leaveMeet('${m.id}')">Cancelar pedido</button>`;
   else if(left<=0) btn=`<button class="primary" disabled>Encontro cheio</button>`;
   else btn=`<button class="primary" onclick="joinMeet('${m.id}')">${m.approval?'Pedir para ir':'Juntar-me'}</button>`;
+  if(IS_MOD && !host) btn+=`<button class="ghost" style="color:var(--red); margin-top:8px;" onclick="modDeleteMeet('${m.id}')">Apagar encontro (moderação)</button>`;
 
   const chat = (mine||host||IS_MOD) ? `<div class="card"><h3>Conversa do grupo</h3><div id="chatBox">${chatHtml(m)}</div>
       ${(mine||host)?`<div class="msg-row"><input id="chatIn" placeholder="Escreve uma mensagem" onkeydown="if(event.key==='Enter')sendChat('${m.id}')"><button class="primary" onclick="sendChat('${m.id}')">Enviar</button></div>`:'<p class="tiny" style="margin:8px 0 0;">Estás a ver como moderador. Para escrever, junta-te ao encontro.</p>'}</div>`
@@ -1989,9 +1989,6 @@ function modDeleteMeet(id){
   if(modPending!==id){ modPending=id; toast('Toca outra vez para confirmar que apagas este encontro'); setTimeout(()=>{ if(modPending===id) modPending=null; },4000); return; }
   modPending=null; cancelMeet(id);
 }
-/* ---------- (antigo) apagar ---------- */
-function askReset(){ document.getElementById('resetConfirm').hidden=false; }
-function doReset(){ try{ localStorage.removeItem(KEY); }catch(e){} S=null; location.reload(); }
 
 /* ---------- arranque ---------- */
 function start(){
