@@ -8,6 +8,9 @@
 <meta name="apple-mobile-web-app-title" content="3S Movimento">
 <meta name="theme-color" content="#1B2A4A">
 <title>3S Movimento</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Jost:wght@300;400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -141,11 +144,13 @@
   nav.bottom button.on{color:var(--coral); font-weight:600;}
   nav.bottom .ic{font-size:19px;}
 
+  .back-top{position:relative; z-index:2; background:rgba(255,255,255,.14); color:#fff; border:none; border-radius:999px; padding:6px 13px 6px 10px; font-size:13px; font-weight:600; cursor:pointer; margin-bottom:10px;}
   /* Folhas (formulários e detalhe) */
   .sheet-back{position:fixed; inset:0; background:rgba(27,42,74,.45); z-index:40; display:flex; align-items:flex-end; justify-content:center;}
   .sheet{background:var(--bg); width:100%; max-width:440px; max-height:92%; overflow-y:auto; border-radius:28px 28px 0 0; padding:18px 16px calc(24px + env(safe-area-inset-bottom,0px));}
-  .sheet .grab{width:44px; height:5px; border-radius:3px; background:var(--ink-faint); margin:0 auto 14px; opacity:.6;}
-  .sheet-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; gap:10px;}
+  .sheet .grab{display:none;}
+  .sheet-head{display:flex; align-items:center; gap:10px; margin:-18px -16px 14px; padding:14px 16px 10px; position:sticky; top:-18px; background:var(--bg); z-index:5;}
+  .sheet-back-btn{border:none; background:var(--card); box-shadow:0 2px 8px var(--shadow); border-radius:999px; padding:8px 14px 8px 11px; font-size:13.5px; font-weight:600; color:var(--ink); cursor:pointer; flex-shrink:0;}
   .sheet-head h2{font-size:21px;}
   .x{border:none; background:var(--card); width:34px; height:34px; border-radius:50%; font-size:16px; cursor:pointer; box-shadow:0 2px 8px var(--shadow); color:var(--ink); flex-shrink:0;}
 
@@ -240,6 +245,7 @@
 <!-- ============ APP ============ -->
 <div id="app" hidden>
   <header class="top">
+    <button class="back-top" id="backTop" hidden onclick="goBack()">‹ Voltar</button>
     <div class="greet" id="greet">Olá</div>
     <h1 id="viewTitle">Início</h1>
   </header>
@@ -491,7 +497,11 @@ function createProfile(){
 
 /* ---------- navegação ---------- */
 const TITLES={inicio:'Início', encontros:'Encontros', mapa:'Mapa', treino:'Treino', perfil:'Perfil'};
-function goView(v){
+let currentView='inicio';
+function goView(v, fromHistory){
+  if(!fromHistory && v!==currentView){ try{ history.pushState({view:v}, ''); }catch(e){} }
+  currentView=v;
+  document.getElementById('backTop').hidden = (v==='inicio');
   document.querySelectorAll('main section').forEach(s=>s.classList.toggle('active', s.id==='v-'+v));
   document.querySelectorAll('nav.bottom button').forEach(b=>b.classList.toggle('on', b.dataset.v===v));
   document.getElementById('viewTitle').textContent = TITLES[v];
@@ -586,11 +596,25 @@ function renderProfile(){
 }
 
 /* ---------- folhas ---------- */
+function sheetOpen(){ return !!document.querySelector('#sheetHost .sheet-back'); }
 function openSheet(title, html){
-  document.getElementById('sheetHost').innerHTML = `<div class="sheet-back" onclick="if(event.target===this)closeSheet()"><div class="sheet" role="dialog" aria-label="${esc(title)}"><div class="grab"></div><div class="sheet-head"><h2>${esc(title)}</h2><button class="x" onclick="closeSheet()" aria-label="Fechar">✕</button></div>${html}</div></div>`;
+  if(!sheetOpen()){ try{ history.pushState({view:currentView, sheet:true}, ''); }catch(e){} }
+  document.getElementById('sheetHost').innerHTML = `<div class="sheet-back" onclick="if(event.target===this)closeSheet()"><div class="sheet" role="dialog" aria-label="${esc(title)}"><div class="grab"></div><div class="sheet-head"><button class="sheet-back-btn" onclick="closeSheet()">‹ Voltar</button><h2>${esc(title)}</h2></div>${html}</div></div>`;
   document.body.style.overflow='hidden';
 }
-function closeSheet(){ document.getElementById('sheetHost').innerHTML=''; document.body.style.overflow=''; }
+function removeSheet(){ document.getElementById('sheetHost').innerHTML=''; document.body.style.overflow=''; }
+function closeSheet(){
+  if(!sheetOpen()) return;
+  if(history.state && history.state.sheet){ history.back(); }  // o popstate fecha a folha
+  else removeSheet();
+}
+function goBack(){ if(history.state && (history.state.sheet || history.state.view!=='inicio') && history.length>1) history.back(); else goView('inicio'); }
+window.addEventListener('popstate', e=>{
+  if(sheetOpen()){ removeSheet(); if(e.state && e.state.sheet) history.back(); return; }
+  const v=(e.state && e.state.view) || 'inicio';
+  if(!S){ return; }
+  goView(v, true);
+});
 function sportOptions(sel){ return Object.entries(SPORTS).map(([k,s])=>`<option value="${k}" ${k===sel?'selected':''}>${s.ic} ${s.name}</option>`).join(''); }
 function levelOptions(sel){ return LEVELS.map(l=>`<option ${l===sel?'selected':''}>${l}</option>`).join(''); }
 
@@ -865,7 +889,8 @@ function doReset(){ try{ localStorage.removeItem(KEY); }catch(e){} S=null; locat
 function start(){
   document.getElementById('loginScreen').hidden=true;
   document.getElementById('app').hidden=false;
-  goView('inicio');
+  try{ history.replaceState({view:'inicio'}, ''); }catch(e){}
+  goView('inicio', true);
 }
 S = load();
 if(S){
