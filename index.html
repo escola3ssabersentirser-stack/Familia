@@ -14,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Jost:wght@300;400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
@@ -180,6 +181,68 @@
   .pick button{border:1.5px solid var(--line); background:var(--card); border-radius:999px; padding:8px 13px; font-size:13px; cursor:pointer; color:var(--ink);}
   .pick button.on{background:var(--navy); color:#fff; border-color:var(--navy);}
 
+  /* PT online */
+  .seg{display:grid; grid-template-columns:repeat(3,1fr); background:var(--card); border-radius:14px; padding:4px; gap:4px; box-shadow:0 3px 12px var(--shadow); margin-bottom:12px;}
+  .seg button{border:none; background:transparent; border-radius:10px; padding:9px 0; font-size:13.5px; font-weight:600; color:var(--ink-soft); cursor:pointer;}
+  .seg button.on{background:var(--navy); color:#fff;}
+  .goal-top{background:var(--navy); color:#fff; border-radius:var(--radius); padding:16px; margin-bottom:12px; position:relative; overflow:hidden;}
+  .goal-top::after{content:''; position:absolute; right:-30px; bottom:-40px; width:120px; height:120px; border-radius:50%; border:1.5px solid var(--gold); opacity:.5;}
+  .goal-top .eyebrow{font-size:11px; letter-spacing:1.6px; text-transform:uppercase; color:var(--gold);}
+  .goal-top h2{color:#fff; font-size:21px; margin:2px 0 4px;}
+  .goal-top .countdown{font-family:'Baloo 2',sans-serif; font-size:30px; font-weight:700; line-height:1; color:#fff;}
+  .goal-top .bar-bg{background:rgba(255,255,255,.18); margin-top:12px;}
+  .goal-top .bar-fill{background:var(--gold);}
+  .goal-top button{position:relative; z-index:1;}
+  .sess{display:flex; gap:12px; align-items:center; padding:11px 0; border-bottom:1px solid var(--line);}
+  .sess:last-child{border-bottom:none;}
+  .sess .day{width:44px; flex-shrink:0; text-align:center; font-size:11px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.5px;}
+  .sess .day b{display:block; font-family:'Baloo 2',sans-serif; font-size:18px; color:var(--ink); letter-spacing:0;}
+  .sess.today .day b{color:var(--coral);}
+  .sess .what{flex:1; min-width:0;}
+  .sess .what .t{font-weight:600; font-size:14px;}
+  .sess .what .d{font-size:12.5px; color:var(--ink-soft); margin-top:2px; line-height:1.4;}
+  .sess .done{width:34px; height:34px; border-radius:50%; border:1.5px solid var(--line); background:var(--card); flex-shrink:0; cursor:pointer; font-size:15px; color:var(--ink-faint);}
+  .sess.ok .done{background:var(--mint); border-color:var(--mint); color:#fff;}
+  .sess.ok .what .t{color:var(--ink-soft); text-decoration:line-through;}
+  .type{display:inline-block; font-size:10.5px; padding:2px 8px; border-radius:999px; margin-right:6px; vertical-align:1px; font-weight:600;}
+  .type.facil{background:var(--mint-soft); color:var(--mint);}
+  .type.qualidade{background:var(--coral-soft); color:#8A6430;}
+  .type.longo{background:var(--navy-soft); color:var(--navy);}
+  .type.forca{background:#EFE7F6; color:#6A4C8A;}
+  .type.prova{background:var(--gold); color:#fff;}
+  .rec-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .rec{background:var(--bg); border-radius:14px; padding:10px 12px;}
+  .rec .l{font-size:11.5px; color:var(--ink-soft);}
+  .rec .v{font-family:'Baloo 2',sans-serif; font-size:19px; font-weight:600; font-variant-numeric:tabular-nums;}
+  .stat3{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px;}
+  .stat3 .rec{background:var(--card); box-shadow:0 3px 12px var(--shadow);}
+  .delta{font-size:11.5px; font-weight:600;}
+  .chart{width:100%; height:auto; display:block;}
+  .opt-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px;}
+  .opt-grid button{border:1.5px solid var(--line); background:var(--card); border-radius:12px; padding:10px 4px; font-size:13px; cursor:pointer; color:var(--ink);}
+  .opt-grid button.on{background:var(--navy); color:#fff; border-color:var(--navy);}
+
+  .hub{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;}
+  .hub-card{background:var(--card); border:none; box-shadow:0 3px 12px var(--shadow); border-radius:var(--radius); padding:14px; text-align:left; cursor:pointer; color:var(--ink); display:flex; flex-direction:column; gap:8px; min-height:132px;}
+  .hub-card.wide{grid-column:1 / -1; min-height:0; flex-direction:row; align-items:center;}
+  .hub-card .hi{width:40px; height:40px; border-radius:13px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .hub-card .hi svg{width:22px; height:22px;}
+  .hub-card .ht{font-family:'Baloo 2',sans-serif; font-weight:600; font-size:16px; line-height:1.15;}
+  .hub-card .hs{font-size:12px; color:var(--ink-soft); line-height:1.35;}
+  .hi.c1{background:var(--coral-soft); color:#8A6430;} .hi.c2{background:var(--navy-soft); color:var(--navy);} .hi.c3{background:var(--mint-soft); color:var(--mint);} .hi.c4{background:#EFE7F6; color:#6A4C8A;} .hi.c5{background:#E5EEF6; color:#3D6A8F;}
+  .pane-title{display:flex; align-items:center; gap:10px; margin:0 0 12px;}
+  .pane-title h2{font-size:21px;}
+  .breath{width:170px; height:170px; border-radius:50%; margin:10px auto 14px; display:flex; align-items:center; justify-content:center; background:var(--mint-soft); color:var(--mint); font-family:'Baloo 2',sans-serif; font-size:20px; font-weight:600; transition:transform 4s ease-in-out; text-align:center;}
+  .breath.in{transform:scale(1.25);} 
+  .mood{display:flex; gap:6px; margin-bottom:10px;}
+  .mood button{flex:1; border:1.5px solid var(--line); background:var(--card); border-radius:12px; padding:10px 0; font-size:20px; cursor:pointer;}
+  .mood button.on{border-color:var(--navy); background:var(--navy-soft);}
+  .toggle-row{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 0; border-bottom:1px solid var(--line); font-size:14px;}
+  .toggle-row:last-child{border-bottom:none;}
+  .toggle-row input{width:auto; margin:0; accent-color:var(--navy); transform:scale(1.25);}
+  .note{background:var(--coral-soft); border-radius:16px; padding:12px 14px; margin-bottom:12px; font-size:14px; line-height:1.5;}
+  .note .from{font-size:11.5px; font-weight:600; color:#8A6430; margin-bottom:3px;}
+
   /* Mapa */
   #mapBox{height:calc(100vh - 330px); min-height:360px; border-radius:var(--radius); overflow:hidden; box-shadow:0 3px 12px var(--shadow); margin-bottom:12px; z-index:1; position:relative;}
   #pickMap{height:220px; border-radius:16px; overflow:hidden; margin-bottom:6px; border:1.5px solid var(--line);}
@@ -227,18 +290,25 @@
     <div class="perk"><div class="pi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-9M12 12c0-4 3-7 8-7 0 5-3 7-8 7zM12 15c0-3-2-5-6-5 0 4 2 5 6 5z"/></svg></div><div class="pt">Reflete e cresce</div></div>
   </div>
   <div class="card">
-    <h3 style="font-size:17px; margin-bottom:12px;">Cria o teu perfil</h3>
-    <label for="lgName">O teu nome</label>
-    <input id="lgName" placeholder="Ex.: Conceição" autocomplete="given-name">
-    <label for="lgZone">Zona</label>
-    <input id="lgZone" placeholder="Ex.: Ponte da Barca">
-    <label>Modalidades de que gostas</label>
-    <div class="pick" id="lgSports"></div>
-    <label for="lgLevel">Nível</label>
-    <select id="lgLevel"><option>Iniciante</option><option>Médio</option><option>Avançado</option></select>
-    <button class="primary" onclick="createProfile()">Entrar</button>
+    <h3 style="font-size:17px; margin-bottom:12px;" id="authTitle">Entra na tua conta</h3>
+    <div class="pick" id="authTabs"><button type="button" class="on" onclick="setAuthMode('entrar')">Já tenho conta</button><button type="button" onclick="setAuthMode('criar')">Criar conta</button></div>
+    <div id="emailFields">
+      <label for="lgEmail">Email</label><input id="lgEmail" type="email" autocomplete="email" placeholder="o.teu@email.pt">
+      <label for="lgPass">Palavra-passe</label><input id="lgPass" type="password" autocomplete="current-password" placeholder="Mínimo 8 caracteres">
+    </div>
+    <div id="signupFields" hidden>
+      <label for="lgName">O teu nome</label><input id="lgName" placeholder="Ex.: Conceição" autocomplete="given-name">
+      <label for="lgZone">Zona</label><input id="lgZone" placeholder="Ex.: Ponte da Barca">
+      <label>Modalidades de que gostas</label>
+      <div class="pick" id="lgSports"></div>
+      <label for="lgLevel">Nível</label>
+      <select id="lgLevel"><option>Iniciante</option><option>Médio</option><option>Avançado</option></select>
+    </div>
+    <button class="primary" id="authBtn" onclick="doAuth()">Entrar</button>
+    <button class="ghost" style="border:none; font-size:13px; color:var(--ink-soft);" onclick="forgotPass()">Esqueci-me da palavra-passe</button>
+    <div id="authMsg" class="note" style="margin:10px 0 0;" hidden></div>
   </div>
-  <p class="tiny" style="text-align:center; margin-top:10px;">Versão de demonstração: os dados ficam guardados só neste telemóvel.</p>
+  <p class="tiny" style="text-align:center; margin-top:10px;">Se já és aluna/o da Escola 3S, entra com a mesma conta.</p>
   </div>
 </div>
 
@@ -325,21 +395,46 @@
 
     <!-- TREINO -->
     <section id="v-treino">
-      <div class="card">
-        <h3>Cronómetro</h3>
-        <div class="timer" id="timer">00:00:00</div>
-        <div class="two">
-          <button class="primary mintbtn" id="tStart" onclick="timerToggle()">Começar</button>
-          <button class="ghost" style="margin:0;" onclick="timerFinish()">Terminar e registar</button>
-        </div>
-        <p class="tiny" style="margin:10px 0 0;">Mantém a app aberta durante o treino. A gravação do percurso por GPS chega na versão para telemóvel.</p>
+      <!-- PAINEL -->
+      <div id="treinoHub">
+        <div id="todayCard"></div>
+        <div class="hub" id="hubGrid"></div>
+        <div id="hubCoach"></div>
       </div>
-      <button class="primary" style="margin-bottom:14px;" onclick="openLog()">Registar atividade</button>
 
-      <div class="card">
-        <h3>As minhas atividades</h3>
-        <div id="logList"></div>
+      <!-- SESSÕES DE COACHING -->
+      <div id="pane-coaching" class="pane" hidden></div>
+
+      <!-- PLANO DE TREINO -->
+      <div id="pane-plano" class="pane" hidden>
+        <div id="goalCard"></div>
+        <div id="coachNote"></div>
+        <div id="planWeek"></div>
+        <div id="planSuggest"></div>
+        <div class="card">
+          <h3>Cronómetro</h3>
+          <div class="timer" id="timer">00:00:00</div>
+          <div class="two">
+            <button class="primary mintbtn" id="tStart" onclick="timerToggle()">Começar</button>
+            <button class="ghost" style="margin:0;" onclick="timerFinish()">Terminar e registar</button>
+          </div>
+          <p class="tiny" style="margin:10px 0 0;">Mantém a app aberta durante o treino.</p>
+        </div>
+        <button class="primary" style="margin-bottom:14px;" onclick="openLog()">Registar treino</button>
+        <div class="card"><h3>Os meus recordes</h3><div id="records"></div></div>
+        <div class="card"><h3>Todos os treinos</h3><div id="logList"></div></div>
+        <div id="planNext"></div>
+        <p class="tiny" style="text-align:center; margin:4px 8px 12px;">Plano de treino sugerido de forma geral. Se tens lesões, dores ou algum problema de saúde, fala primeiro com o teu médico ou com o teu coach.</p>
       </div>
+
+      <!-- SAÚDE -->
+      <div id="pane-saude" class="pane" hidden></div>
+      <!-- CORPO -->
+      <div id="pane-corpo" class="pane" hidden></div>
+      <!-- MENTE -->
+      <div id="pane-mente" class="pane" hidden></div>
+      <!-- ATLETAS (coach) -->
+      <div id="pane-atletas" class="pane" hidden></div>
     </section>
 
     <!-- PERFIL -->
@@ -363,7 +458,7 @@
       <div class="card">
         <h3>Confiança</h3>
         <div class="list-row"><span>Encontros em que participei</span><b class="num" id="pfMeets">0</b></div>
-        <div class="list-row"><span>Telemóvel verificado</span><span class="badge">Na versão final</span></div>
+        <div class="list-row"><span>Conta com email confirmado</span><span class="badge mint">Sim</span></div>
       </div>
 
       <div class="card">
@@ -378,9 +473,19 @@
         <div id="pfReflections"></div>
       </div>
 
+      <div class="card" id="donaCard" hidden>
+        <h3>Dar acesso de coach</h3>
+        <p class="muted" style="margin:-4px 0 10px;">A pessoa tem de criar conta na app primeiro. Depois escreve aqui o email dela.</p>
+        <label for="mkEmail">Email da conta do coach</label><input id="mkEmail" type="email" placeholder="email@exemplo.pt">
+        <label for="mkTitle">Título</label><input id="mkTitle" value="Coach desportivo certificado">
+        <label for="mkBio">Apresentação (separada por vírgulas)</label><input id="mkBio" value="Coach certificado, Ironman, Paraquedista e formador de recrutas, Liderança e formação de equipas corporativas">
+        <button class="primary" onclick="makeCoach()">Dar acesso de coach</button>
+        <p class="tiny" id="mkResult" style="margin:10px 0 0;"></p>
+      </div>
+      <button class="ghost" onclick="logout()">Terminar sessão</button>
       <button class="ghost" onclick="askReset()">Apagar os meus dados</button>
       <div id="resetConfirm" hidden class="card" style="margin-top:10px;">
-        <p style="margin:0 0 10px; font-size:14px;">Isto apaga o perfil, os encontros e as atividades guardados neste telemóvel. Não dá para desfazer.</p>
+        <p style="margin:0 0 10px; font-size:14px;">Isto apaga o teu perfil, os encontros que criaste, os treinos, as medições e os registos de saúde do 3S Movimento. A tua conta da Escola 3S não é apagada. Não dá para desfazer.</p>
         <div class="two">
           <button class="primary" style="background:var(--red);" onclick="doReset()">Apagar tudo</button>
           <button class="ghost" style="margin:0;" onclick="document.getElementById('resetConfirm').hidden=true">Cancelar</button>
@@ -393,7 +498,7 @@
     <button data-v="inicio" class="on" onclick="goView('inicio')"><span class="ic">🏠</span>Início</button>
     <button data-v="encontros" onclick="goView('encontros')"><span class="ic">🤝</span>Encontros</button>
     <button data-v="mapa" onclick="goView('mapa')"><span class="ic">🗺️</span>Mapa</button>
-    <button data-v="treino" onclick="goView('treino')"><span class="ic">⏱️</span>Treino</button>
+    <button data-v="treino" onclick="goView('treino')"><span class="ic">💪</span>PT 3S</button>
     <button data-v="perfil" onclick="goView('perfil')"><span class="ic">👤</span>Perfil</button>
   </nav>
 </div>
@@ -500,18 +605,21 @@ function renderLoginSports(){
   box.innerHTML = Object.entries(SPORTS).map(([k,s])=>`<button type="button" class="${pickSports.has(k)?'on':''}" onclick="togglePick('${k}')">${s.name}</button>`).join('');
 }
 function togglePick(k){ pickSports.has(k)? pickSports.delete(k) : pickSports.add(k); renderLoginSports(); }
+let pickRole='atleta';
+function setRole(r){ pickRole=r; document.querySelectorAll('#lgRole button').forEach((b,i)=>b.classList.toggle('on',(i===1)===(r==='coach'))); document.getElementById('lgCoachBox').hidden = r!=='coach'; }
 function createProfile(){
   const name=document.getElementById('lgName').value.trim();
   const zone=document.getElementById('lgZone').value.trim();
   if(!name){ document.getElementById('lgName').focus(); toast('Escreve o teu nome para entrar'); return; }
-  const me={id:'me', name, zone: zone||'Minho', level:document.getElementById('lgLevel').value, sports:[...pickSports]};
+  if(pickRole==='coach' && document.getElementById('lgCoach').value.trim().toUpperCase()!==COACH.code){ toast('Código de coach errado'); return; }
+  const me={id:'me', name, zone: zone||'Minho', level:document.getElementById('lgLevel').value, sports:[...pickSports], role:pickRole};
   S = seed(me);
   save();
   start();
 }
 
 /* ---------- navegação ---------- */
-const TITLES={inicio:'Início', encontros:'Encontros', mapa:'Mapa', treino:'Treino', perfil:'Perfil'};
+const TITLES={inicio:'Início', encontros:'Encontros', mapa:'Mapa', treino:'PT 3S', perfil:'Perfil'};
 let currentView='inicio';
 function goView(v, fromHistory){
   if(!fromHistory && v!==currentView){ try{ history.pushState({view:v}, ''); }catch(e){} }
@@ -523,6 +631,7 @@ function goView(v, fromHistory){
   window.scrollTo(0,0);
   renderAll();
   if(v==='mapa') initMap();
+  if(v==='treino' && !fromHistory){ currentPane=null; openPane(null, true); }
 }
 function person(id){ return id==='me' ? S.me : (S.people[id] || {name:'?', zone:''}); }
 function firstName(id){ return id==='me' ? 'Tu' : person(id).name.split(' ')[0]; }
@@ -554,7 +663,7 @@ function upcoming(){ return S.meets.filter(m=>!isPast(m)).sort((a,b)=>(a.date+a.
 function renderAll(){
   if(!S) return;
   document.getElementById('greet').textContent = 'Olá, '+S.me.name.split(' ')[0];
-  renderWeek(); renderHome(); renderMeets(); renderLogs(); renderProfile();
+  renderWeek(); renderHome(); renderMeets(); renderLogs(); renderProfile(); renderTreino();
 }
 function weekLogs(){ const ws=weekStart(); return S.logs.filter(l=>parseDate(l.date)>=ws); }
 function renderWeek(){
@@ -591,7 +700,7 @@ function renderLogs(){
   const logs=[...S.logs].sort((a,b)=>b.date.localeCompare(a.date));
   box.innerHTML = logs.length ? logs.map(l=>`<div class="list-row">
       <div class="left"><span class="sport" style="width:38px;height:38px;font-size:17px;">${SPORTS[l.sport].ic}</span>
-        <div style="min-width:0;"><div style="font-weight:600;">${esc(l.title||SPORTS[l.sport].name)}</div><div class="tiny">${niceDate(l.date)} · ${fmtDur(l.min)}${l.meetId?' · em grupo':''}</div></div></div>
+        <div style="min-width:0;"><div style="font-weight:600;">${esc(l.title||SPORTS[l.sport].name)}</div><div class="tiny">${niceDate(l.date)} · ${fmtDur(l.min)}${paceTxt(l)?' · '+paceTxt(l):''}${l.meetId?' · em grupo':''}</div></div></div>
       <div style="text-align:right;"><div class="num" style="font-weight:600;">${Number(l.km).toLocaleString('pt-PT')} km</div><div style="font-size:15px;">${FEELINGS[(l.feel||3)-1]}</div></div>
     </div>`).join('') : `<div class="empty">Ainda sem atividades.<br>Regista o teu primeiro treino ou encontro.</div>`;
 }
@@ -629,6 +738,7 @@ window.addEventListener('popstate', e=>{
   const v=(e.state && e.state.view) || 'inicio';
   if(!S){ return; }
   goView(v, true);
+  if(v==='treino') openPane((e.state && e.state.pane) || null, true);
 });
 function sportOptions(sel){ return Object.entries(SPORTS).map(([k,s])=>`<option value="${k}" ${k===sel?'selected':''}>${s.ic} ${s.name}</option>`).join(''); }
 function levelOptions(sel){ return LEVELS.map(l=>`<option ${l===sel?'selected':''}>${l}</option>`).join(''); }
@@ -643,6 +753,7 @@ function openMeet(id){
   else if(past) btn=`<div class="badge" style="display:inline-block;">Este encontro já aconteceu</div>`;
   else if(host) btn=`<button class="ghost" style="color:var(--red);" onclick="cancelMeet('${m.id}')">Cancelar encontro</button>`;
   else if(mine) btn=`<button class="ghost" onclick="leaveMeet('${m.id}')">Já não vou</button>`;
+  else if((m.pending||[]).includes('me')) btn=`<div class="badge coral" style="display:inline-block; margin-bottom:6px;">À espera de aprovação</div><button class="ghost" onclick="leaveMeet('${m.id}')">Cancelar pedido</button>`;
   else if(left<=0) btn=`<button class="primary" disabled>Encontro cheio</button>`;
   else btn=`<button class="primary" onclick="joinMeet('${m.id}')">${m.approval?'Pedir para ir':'Juntar-me'}</button>`;
 
@@ -667,8 +778,8 @@ function openMeet(id){
       <a class="tiny" style="display:block; margin-top:10px; color:var(--navy);" href="https://www.google.com/maps/search/?api=1&query=${m.lat?m.lat+','+m.lng:encodeURIComponent(m.place)}" target="_blank" rel="noopener">Ver ponto de encontro no mapa ↗</a>
     </div>
     <div class="card"><h3>Quem vai (${m.going.length})</h3>${people}</div>
+    ${(host && (m.pending||[]).length)?`<div class="card"><h3>Pedidos para ir (${m.pending.length})</h3>${m.pending.map(pid=>`<div class="list-row"><span>${esc(person(pid).name)} · ${esc(person(pid).level||'')}</span><button class="primary small mintbtn" onclick="approveMember('${m.id}','${unId(pid)}')">Aprovar</button></div>`).join('')}</div>`:''}
     ${chat}
-    ${m.example?'<p class="tiny" style="text-align:center;">Encontro de exemplo, com pessoas fictícias.</p>':''}
   `);
 }
 function chatHtml(m){
@@ -758,17 +869,19 @@ function proposeFrom(id){
 
 /* --- registar atividade --- */
 let logEffort=3, logFeel=4;
-function openLog(meetId, minutes){
+let logPreset=null;
+function openLog(meetId, minutes, preset){
   const m = meetId ? S.meets.find(x=>x.id===meetId) : null;
+  logPreset = preset||null; const P=preset||{};
   logEffort=3; logFeel=4;
   const q=REFLECTIONS[Math.floor(Math.random()*REFLECTIONS.length)];
   openSheet(m?'Como correu?':'Registar atividade', `
     <div class="card">
       ${m?`<p style="margin:0 0 12px;"><b>${esc(m.title)}</b><br><span class="tiny">${niceDate(m.date)} · com ${m.going.length-1} ${m.going.length-1===1?'pessoa':'pessoas'}</span></p>`:''}
-      <label for="lSport">Modalidade</label><select id="lSport">${sportOptions(m?m.sport:(S.me.sports[0]||'caminhada'))}</select>
-      <div class="two"><div><label for="lKm">Distância (km)</label><input id="lKm" type="number" min="0" step="0.1" value="${m?m.km:''}" placeholder="0"></div>
+      <label for="lSport">Modalidade</label><select id="lSport">${sportOptions(m?m.sport:(P.sport||S.me.sports[0]||'caminhada'))}</select>
+      <div class="two"><div><label for="lKm">Distância (km)</label><input id="lKm" type="number" min="0" step="0.1" value="${m?m.km:(P.km||'')}" placeholder="0"></div>
         <div><label for="lMin">Tempo (min)</label><input id="lMin" type="number" min="1" step="1" value="${minutes||(m?m.dur:'')}" placeholder="0"></div></div>
-      <label for="lDate">Dia</label><input id="lDate" type="date" value="${m?m.date:addDays(0)}" max="${addDays(0)}">
+      <label for="lDate">Dia</label><input id="lDate" type="date" value="${m?m.date:(P.date||addDays(0))}" max="${addDays(0)}">
       <label>Esforço (1 = leve, 5 = máximo)</label>
       <div class="effort" id="effortBox">${[1,2,3,4,5].map(n=>`<button type="button" class="${n===3?'on':''}" onclick="setEffort(${n})">${n}</button>`).join('')}</div>
       <label>Como te sentiste?</label>
@@ -790,6 +903,8 @@ function saveLog(meetId, question){
   S.logs.push({id:uid(), sport:g('lSport'), km:km||0, min:min||0, date:g('lDate')||addDays(0), effort:logEffort, feel:logFeel,
     question:ta.value, answer:g('lAnswer'), meetId: m?m.id:null, title: m?m.title:null});
   if(m) m.logged=true;
+  if(logPreset && logPreset.key){ S.planDone=S.planDone||{}; S.planDone[logPreset.key]=true; }
+  logPreset=null;
   save(); closeSheet(); renderAll();
   const wk=weekLogs().reduce((a,l)=>a+Number(l.km||0),0);
   toast(wk>=S.goalKm ? 'Meta da semana cumprida! 🎉' : 'Atividade guardada 💪');
@@ -896,7 +1011,959 @@ function initPickMap(ll){
   setTimeout(()=>pickMap.invalidateSize(),80);
 }
 
-/* ---------- apagar ---------- */
+/* =========================================================
+   PT ONLINE — painel Treino: Coaching, Plano, Saúde, Corpo, Mente
+   + acesso do coach
+   ========================================================= */
+let COACH = {
+  name:'Valter Canhita', code:'3S-VC01',
+  title:'Coach desportivo certificado',
+  bio:['Coach certificado','Ironman','Paraquedista e formador de recrutas','Liderança e formação de equipas corporativas'],
+};
+const GOAL_SPORTS = ['corrida','trilho','caminhada','bike','natacao'];
+const BASE = { corrida:{Iniciante:3,'Médio':6,'Avançado':10}, trilho:{Iniciante:5,'Médio':8,'Avançado':12},
+  caminhada:{Iniciante:4,'Médio':7,'Avançado':10}, bike:{Iniciante:15,'Médio':30,'Avançado':50}, natacao:{Iniciante:0.5,'Médio':1,'Avançado':2} };
+const PATTERNS = {
+  2:[{d:1,t:'facil'},{d:5,t:'longo'}],
+  3:[{d:1,t:'qualidade'},{d:3,t:'facil'},{d:5,t:'longo'}],
+  4:[{d:0,t:'forca'},{d:1,t:'qualidade'},{d:3,t:'facil'},{d:5,t:'longo'}],
+  5:[{d:0,t:'forca'},{d:1,t:'qualidade'},{d:2,t:'facil'},{d:3,t:'facil'},{d:5,t:'longo'}],
+};
+const TYPE_NAME = {facil:'Fácil', qualidade:'Qualidade', longo:'Longo', forca:'Força', prova:'Prova'};
+const WD = ['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
+const ICONS = {
+  coaching:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v10H9l-5 4z"/><path d="M8 9h8M8 12h5"/></svg>',
+  plano:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4M8 14l2 2 4-4"/></svg>',
+  saude:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/><path d="M5 12h3l2-3 3 6 2-3h4"/></svg>',
+  corpo:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 10a5 5 0 0 1 7 0M12 10l1.5-2"/></svg>',
+  mente:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 4c-2 3-2 13 0 16M4 12h16"/></svg>',
+  atletas:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M2.5 19c.6-3 2.8-5 5.5-5s4.9 2 5.5 5M12.5 15.2c.9-.8 2.1-1.2 3.5-1.2 2.7 0 4.9 2 5.5 5"/></svg>',
+};
+
+/* ---------- dados ---------- */
+function ptInit(){
+  S.goal = S.goal || null;
+  S.planDone = S.planDone || {};
+  S.body = S.body || [];
+  S.health = S.health || [];
+  S.mind = S.mind || [];
+  S.sessions = S.sessions || [];
+  S.coachNotes = S.coachNotes || [];
+  S.coach = S.coach || null;
+  S.me.role = S.me.role || 'atleta';
+  if(S.me.role==='coach' && !S.athletes) S.athletes = demoAthletes();
+}
+function isCoach(){ return S.me.role==='coach'; }
+function nm(n,d=1){ return Number(n).toLocaleString('pt-PT',{maximumFractionDigits:d}); }
+function daysUntil(s){ const t=new Date(); t.setHours(0,0,0,0); return Math.round((parseDate(s)-t)/864e5); }
+function mondayOf(d){ const x=new Date(d); x.setHours(0,0,0,0); x.setDate(x.getDate()-((x.getDay()+6)%7)); return x; }
+function plusDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
+
+/* ---------- plano de treino ---------- */
+function buildPlan(goal, logs){
+  if(!goal) return [];
+  const sport=goal.sport, lvl=goal.level||'Iniciante';
+  const base=(BASE[sport]||BASE.caminhada)[lvl];
+  const raceDay = goal.type==='prova' && goal.date ? parseDate(goal.date) : plusDays(new Date(), 56);
+  const start = mondayOf(new Date());
+  let W = Math.ceil((raceDay - start)/(7*864e5)); W = Math.max(2, Math.min(30, W));
+  const target = goal.type==='prova' ? Number(goal.km)||base*2 : base*1.8;
+  const peak = goal.type==='prova' ? target*((sport==='corrida' && target<=10)? 1 : (sport==='natacao'? 1 : 0.8)) : target;
+  const recent = Math.max(0, ...((logs||[]).filter(l=>l.sport===sport).map(l=>Number(l.km)||0)));
+  const startLong = Math.min(peak*0.6, Math.max(base, recent*0.9));
+  const pattern = PATTERNS[goal.days||3] || PATTERNS[3];
+  const weeks=[];
+  for(let w=0; w<W; w++){
+    const last = w===W-1;
+    let long = W>2 ? startLong + (peak-startLong)*Math.min(1, w/(W-2)) : peak;
+    if(!last && w%4===3) long*=0.75;
+    if(last) long = peak*0.5;
+    const ws = plusDays(start, w*7);
+    const sessions = pattern.map(p=>{
+      const date = ymd(plusDays(ws, p.d));
+      let type=p.t, km=0;
+      if(type==='longo') km=long; else if(type==='facil') km=long*0.45; else if(type==='qualidade') km=long*0.5;
+      return makeSession(goal, w, date, type, km);
+    });
+    if(last && goal.type==='prova' && goal.date){
+      const rd=goal.date;
+      const keep = sessions.filter(s=>s.date<rd && s.type!=='longo' && s.type!=='qualidade').map(s=>({...s, km:s.km*0.7}));
+      keep.push(makeSession(goal, w, rd, 'prova', Number(goal.km)));
+      weeks.push({start:ymd(ws), sessions:keep.sort((a,b)=>a.date.localeCompare(b.date)), recovery:false, last:true});
+    } else {
+      weeks.push({start:ymd(ws), sessions, recovery: !last && w%4===3, last});
+    }
+  }
+  return weeks;
+}
+function round(km, sport){ return sport==='natacao' ? Math.max(0.2, Math.round(km*10)/10) : Math.max(1, Math.round(km*2)/2); }
+function makeSession(goal, w, date, type, km){
+  const sp=goal.sport, k=type==='forca'?0:round(km, sp);
+  const alt = w%2===0;
+  const D = {
+    corrida:{facil:'Corrida fácil, a ritmo de conseguir conversar.', qualidade: alt?'Aquecer 10 min · 6×400 m rápidos com 2 min a andar · 10 min calmo.':'Aquecer 10 min · 20 min a ritmo forte mas controlado · 10 min calmo.', longo:'Corrida longa, ritmo calmo. Bebe água pelo caminho.'},
+    trilho:{facil:'Corrida fácil em terra batida.', qualidade:'Subidas: 6 a 8 subidas de 1 min a ritmo forte, descer a andar.', longo:'Trilho longo com subidas e descidas. Treina o que vais comer e beber na prova.'},
+    caminhada:{facil:'Caminhada a ritmo confortável.', qualidade:'Caminhada em ritmo vivo, com 5×3 min mais rápidos.', longo:'Caminhada longa, de preferência num trilho.'},
+    bike:{facil:'Volta fácil, pedalada leve.', qualidade:'5×4 min forte com 3 min fácil entre cada.', longo:'Volta longa a ritmo constante.'},
+    natacao:{facil:'Nado contínuo fácil, foca-te na técnica.', qualidade:'Séries: 8×50 m forte com 30 s de pausa.', longo:'Nado contínuo longo, ritmo calmo.'},
+  }[sp] || {};
+  let title, desc;
+  if(type==='forca'){ title='Força e mobilidade · 25 min'; desc='3 voltas: 12 agachamentos, 10 lunges por perna, 30 s de prancha, 12 pontes de glúteo. Termina com 5 min de alongamentos.'; }
+  else if(type==='prova'){ title=`${goal.name||'Prova'} · ${nm(k)} km`; desc='Dia da prova! Começa devagar, bebe água e aproveita. 🏅'; }
+  else { title=`${SPORTS[sp].name} · ${nm(k)} km`; desc=D[type]||''; }
+  return {key:`${w}-${date}-${type}`, w, date, type, km:k, sport:sp, title, desc};
+}
+function sessionDone(s, done, logs){
+  if(done && done[s.key]) return true;
+  if(s.type==='forca') return false;
+  return (logs||[]).some(l=>l.date===s.date && (l.sport===s.sport || (s.sport==='trilho'&&l.sport==='corrida')));
+}
+function currentWeek(plan){ const today=addDays(0); return plan.findIndex(w=>today>=w.start && today<=ymd(plusDays(parseDate(w.start),6))); }
+function planProgress(plan, done, logs){ const all=plan.flatMap(w=>w.sessions).filter(s=>s.date<=addDays(0)); if(!all.length) return {done:0,total:0}; return {done:all.filter(s=>sessionDone(s,done,logs)).length, total:all.length}; }
+
+/* ---------- navegação no painel ---------- */
+let currentPane=null;
+function openPane(p, fromHistory){
+  if(!fromHistory){ try{ history.pushState({view:'treino', pane:p}, ''); }catch(e){} }
+  currentPane=p;
+  document.getElementById('treinoHub').hidden = !!p;
+  document.querySelectorAll('#v-treino .pane').forEach(el=>el.hidden = el.id!=='pane-'+p);
+  document.getElementById('viewTitle').textContent = p ? PANE_TITLES[p] : (isCoach()?'Coach':'PT 3S');
+  document.getElementById('backTop').hidden = false;
+  window.scrollTo(0,0);
+  renderTreino();
+}
+const PANE_TITLES={coaching:'Sessões de coaching', plano:'Plano de treino', saude:'Saúde', corpo:'Corpo', mente:'Mente', atletas:'Os meus atletas'};
+
+/* ---------- render principal ---------- */
+function renderTreino(){
+  if(!S) return;
+  ptInit();
+  renderHub();
+  if(currentPane==='plano'){ renderPlan(); renderLogs(); renderRecords(); }
+  if(currentPane==='coaching') renderCoaching();
+  if(currentPane==='saude') renderHealth();
+  if(currentPane==='corpo') renderBody();
+  if(currentPane==='mente') renderMind();
+  if(currentPane==='atletas') renderAthletes();
+}
+function hubCard(key, cls, title, sub, wide){
+  return `<button class="hub-card ${wide?'wide':''}" onclick="openPane('${key}')"><span class="hi ${cls}">${ICONS[key]}</span><span style="min-width:0;"><span class="ht" style="display:block">${title}</span><span class="hs" style="display:block; margin-top:3px;">${sub}</span></span></button>`;
+}
+function renderHub(){
+  const plan=buildPlan(S.goal, S.logs);
+  const today=addDays(0);
+  const todays=plan.flatMap(w=>w.sessions).filter(s=>s.date===today);
+  let tc='';
+  if(todays.length){
+    tc = `<div class="goal-top"><div class="eyebrow">Treino de hoje</div>${todays.map(s=>`<h2>${esc(s.title)}</h2><div style="font-size:13px; opacity:.85; position:relative; z-index:1;">${esc(s.desc)}</div>`).join('')}
+      <div style="display:flex; gap:8px; margin-top:12px; position:relative; z-index:1;"><button class="primary small" style="background:var(--gold);" onclick="doSession('${todays[0].key}')">${sessionDone(todays[0],S.planDone,S.logs)?'Feito ✓':'Marcar como feito'}</button><button class="ghost small" style="color:#fff; border-color:rgba(255,255,255,.3);" onclick="openPane('plano')">Ver plano</button></div></div>`;
+  } else if(!S.goal && !isCoach()){
+    tc = `<div class="goal-top"><div class="eyebrow">O teu PT online</div><h2>Qual é o teu objetivo?</h2><div style="font-size:13px; opacity:.85; position:relative; z-index:1;">Diz-nos se queres fazer uma prova ou ganhar forma. A app cria o teu plano semana a semana.</div><button class="primary small" style="background:var(--gold); margin-top:12px;" onclick="openGoalForm()">Definir objetivo</button></div>`;
+  }
+  document.getElementById('todayCard').innerHTML = tc;
+
+  const next=S.sessions.filter(s=>s.date>=today).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time))[0];
+  const pg=planProgress(plan,S.planDone,S.logs);
+  const lastBody=[...S.body].sort((a,b)=>b.date.localeCompare(a.date))[0];
+  const lastH=[...S.health].sort((a,b)=>b.date.localeCompare(a.date))[0];
+  const lastM=[...S.mind].sort((a,b)=>b.date.localeCompare(a.date))[0];
+  let cards='';
+  if(isCoach()) cards+=hubCard('atletas','c2','Os meus atletas', `${(S.athletes||[]).length} atletas ligados · código ${COACH.code}`, true);
+  cards+=hubCard('coaching','c1','Sessões de coaching', next? `Próxima: ${niceDate(next.date)}, ${esc(next.time)}` : (isCoach()?'A tua agenda de sessões':'Marca com o coach '+COACH.name.split(' ')[0]));
+  cards+=hubCard('plano','c2','Plano de treino', S.goal? `${pg.done} de ${pg.total} treinos feitos` : 'Define o teu objetivo');
+  cards+=hubCard('saude','c3','Saúde', lastH? `Sono ${nm(lastH.sleep)} h · energia ${lastH.energy}/5` : 'Sono, energia e dores');
+  cards+=hubCard('corpo','c4','Corpo', lastBody&&lastBody.weight? `${nm(lastBody.weight)} kg${lastBody.muscle?' · músculo '+nm(lastBody.muscle)+' kg':''}` : 'Peso, massa muscular, medidas');
+  cards+=hubCard('mente','c5','Mente', lastM? `Último registo: ${FEELINGS[lastM.mood-1]}` : 'Humor, respiração, reflexões 3S', !isCoach());
+  document.getElementById('hubGrid').innerHTML=cards;
+
+  document.getElementById('hubCoach').innerHTML = isCoach() ? '' : coachCardHtml();
+}
+function coachCardHtml(){
+  const bio=COACH.bio.map(b=>`<span class="badge">${esc(b)}</span>`).join('');
+  if(!S.coach){
+    return `<div class="card"><h3>O teu coach</h3>
+      <div class="row" style="justify-content:flex-start; gap:12px; margin-bottom:10px;"><span class="av" style="width:46px;height:46px;font-size:16px;border:none;background:var(--navy);color:#fff;">${esc(initials(COACH.name))}</span><div><b>${esc(COACH.name)}</b><div class="tiny">${esc(COACH.title)}</div></div></div>
+      <div class="meta" style="margin-bottom:12px;">${bio}</div>
+      <label for="coachCode">Código do coach</label><input id="coachCode" placeholder="Ex.: 3S-VC01">
+      <button class="primary" onclick="connectCoach()">Ligar ao coach</button>
+      <p class="tiny" style="margin:8px 0 0;">Pede o código ao teu coach. Depois escolhes o que ele pode ver.</p></div>`;
+  }
+  const sh=S.coach.share;
+  return `<div class="card"><h3>O teu coach</h3>
+    <div class="row" style="justify-content:flex-start; gap:12px; margin-bottom:8px;"><span class="av" style="width:46px;height:46px;font-size:16px;border:none;background:var(--navy);color:#fff;">${esc(initials(COACH.name))}</span><div><b>${esc(COACH.name)}</b><div class="tiny">${esc(COACH.title)} · ligado</div></div></div>
+    <div class="meta" style="margin-bottom:8px;">${bio}</div>
+    <div class="tiny" style="margin:6px 0 2px;">O que o coach pode ver:</div>
+    <div class="toggle-row"><span>Plano e treinos</span><input type="checkbox" ${sh.treinos?'checked':''} onchange="setShare('treinos',this.checked)"></div>
+    <div class="toggle-row"><span>Corpo (peso e medidas)</span><input type="checkbox" ${sh.corpo?'checked':''} onchange="setShare('corpo',this.checked)"></div>
+    <div class="toggle-row"><span>Saúde (sono, energia, dores)</span><input type="checkbox" ${sh.saude?'checked':''} onchange="setShare('saude',this.checked)"></div>
+    <button class="ghost" onclick="disconnectCoach()">Desligar do coach</button></div>`;
+}
+function connectCoach(){
+  const c=document.getElementById('coachCode').value.trim().toUpperCase();
+  if(c!==COACH.code){ toast('Código errado. Confirma com o teu coach.'); return; }
+  S.coach={code:c, share:{treinos:true, corpo:false, saude:false}, since:addDays(0)};
+  if(!S.coachNotes.length) S.coachNotes.push({date:addDays(0), text:'Bem-vinda/o! Define o teu objetivo no Plano de treino e marca a primeira sessão comigo. Vamos com calma e com consistência.'});
+  save(); renderTreino(); toast('Ligado ao coach '+COACH.name.split(' ')[0]);
+}
+function disconnectCoach(){ S.coach=null; save(); renderTreino(); toast('Desligado do coach'); }
+function setShare(k,v){ S.coach.share[k]=v; save(); toast(v?'O coach passa a ver isto':'O coach deixa de ver isto'); }
+
+/* ---------- objetivo ---------- */
+let gf={};
+function openGoalForm(){
+  const g=S.goal||{type:'prova', sport:(GOAL_SPORTS.find(s=>S.me.sports.includes(s))||'corrida'), km:10, date:addDays(70), days:3, level:S.me.level, name:''};
+  gf={...g};
+  openSheet('O meu objetivo', `
+    <div class="card">
+      <label>O que queres?</label>
+      <div class="opt-grid" style="grid-template-columns:1fr 1fr;" id="gfType">
+        <button type="button" class="${gf.type==='prova'?'on':''}" onclick="gfSet('type','prova')">Fazer uma prova</button>
+        <button type="button" class="${gf.type==='forma'?'on':''}" onclick="gfSet('type','forma')">Ganhar forma</button>
+      </div>
+      <label for="gfSport">Modalidade</label><select id="gfSport">${GOAL_SPORTS.map(k=>`<option value="${k}" ${k===gf.sport?'selected':''}>${SPORTS[k].ic} ${SPORTS[k].name}</option>`).join('')}</select>
+      <div id="gfRace" ${gf.type==='prova'?'':'hidden'}>
+        <label for="gfName">Nome da prova</label><input id="gfName" placeholder="Ex.: Trail Pé do Negro" value="${esc(gf.name||'')}">
+        <div class="two"><div><label for="gfKm">Distância (km)</label><input id="gfKm" type="number" min="1" step="0.5" value="${gf.km||10}"></div>
+        <div><label for="gfDate">Data da prova</label><input id="gfDate" type="date" min="${addDays(14)}" value="${gf.date||addDays(70)}"></div></div>
+        <a class="tiny" href="https://gotrail.run/calendario-trail-running/portugal" target="_blank" rel="noopener" style="color:var(--navy); display:block; margin:-4px 0 10px;">Procurar provas de trail ↗</a>
+      </div>
+      <label>Quantos dias por semana podes treinar?</label>
+      <div class="opt-grid" style="grid-template-columns:repeat(4,1fr);" id="gfDays">${[2,3,4,5].map(n=>`<button type="button" class="${gf.days===n?'on':''}" onclick="gfSet('days',${n})">${n} dias</button>`).join('')}</div>
+      <label for="gfLevel">Nível</label><select id="gfLevel">${levelOptions(gf.level)}</select>
+      <button class="primary" onclick="saveGoalForm()">Criar o meu plano</button>
+    </div>`);
+}
+function gfSet(k,v){ gf[k]=v; if(k==='type'){ document.getElementById('gfRace').hidden = v!=='prova'; document.querySelectorAll('#gfType button').forEach((b,i)=>b.classList.toggle('on',(i===0)===(v==='prova'))); }
+  if(k==='days') document.querySelectorAll('#gfDays button').forEach((b,i)=>b.classList.toggle('on',[2,3,4,5][i]===v)); }
+function saveGoalForm(){
+  const g=id=>document.getElementById(id).value.trim();
+  const goal={type:gf.type, sport:g('gfSport'), days:gf.days||3, level:g('gfLevel'), created:addDays(0)};
+  if(goal.type==='prova'){
+    goal.name=g('gfName')||'A minha prova'; goal.km=Number(g('gfKm'))||10; goal.date=g('gfDate');
+    if(!goal.date || daysUntil(goal.date)<14){ toast('Escolhe uma data com pelo menos 2 semanas'); return; }
+  }
+  S.goal=goal; S.planDone={}; save(); closeSheet(); renderTreino(); toast('Plano criado 💪');
+}
+
+/* ---------- plano: render ---------- */
+function sessHtml(s, done, logs, clickable){
+  const today=addDays(0), d=parseDate(s.date), ok=sessionDone(s,done,logs);
+  return `<div class="sess ${s.date===today?'today':''} ${ok?'ok':''}">
+    <div class="day">${WD[(d.getDay()+6)%7]}<b>${d.getDate()}</b></div>
+    <div class="what"><div class="t"><span class="type ${s.type}">${TYPE_NAME[s.type]}</span>${esc(s.title)}</div><div class="d">${esc(s.desc)}</div></div>
+    ${clickable?`<button class="done" onclick="doSession('${s.key}')" aria-label="Marcar como feito">✓</button>`:`<span class="done" style="display:flex;align-items:center;justify-content:center;">${ok?'✓':''}</span>`}
+  </div>`;
+}
+function renderPlan(){
+  const gc=document.getElementById('goalCard');
+  if(!S.goal){
+    gc.innerHTML=`<div class="goal-top"><div class="eyebrow">Plano de treino</div><h2>Começa pelo objetivo</h2><div style="font-size:13px; opacity:.85; position:relative; z-index:1;">Uma prova com data ou simplesmente ganhar forma. O plano adapta-se aos dias que tens.</div><button class="primary small" style="background:var(--gold); margin-top:12px;" onclick="openGoalForm()">Definir objetivo</button></div>`;
+    ['planWeek','planSuggest','planNext','coachNote'].forEach(id=>document.getElementById(id).innerHTML='');
+    return;
+  }
+  const G=S.goal, plan=buildPlan(G,S.logs), pg=planProgress(plan,S.planDone,S.logs);
+  const wi=Math.max(0,currentWeek(plan));
+  const left = G.type==='prova' ? daysUntil(G.date) : null;
+  gc.innerHTML=`<div class="goal-top">
+    <div class="eyebrow">${G.type==='prova'?'Objetivo · prova':'Objetivo · ganhar forma'}</div>
+    <h2>${G.type==='prova'? esc(G.name)+' · '+nm(G.km)+' km' : SPORTS[G.sport].name+', '+G.days+'× por semana'}</h2>
+    <div class="row" style="position:relative; z-index:1; align-items:flex-end;">
+      <div>${left!==null?`<span class="countdown num">${left}</span> <span style="opacity:.8; font-size:13px;">dias · ${niceDate(G.date)}</span>`:`<span class="countdown num">${wi+1}</span> <span style="opacity:.8; font-size:13px;">de ${plan.length} semanas</span>`}</div>
+      <button class="ghost small" style="color:#fff; border-color:rgba(255,255,255,.3);" onclick="openGoalForm()">Alterar</button>
+    </div>
+    <div class="bar-bg"><div class="bar-fill" style="width:${pg.total?Math.round(pg.done/pg.total*100):0}%"></div></div>
+    <div style="font-size:12px; opacity:.8; margin-top:6px; position:relative; z-index:1;">Semana ${wi+1} de ${plan.length} · ${pg.done} de ${pg.total} treinos feitos até hoje</div>
+  </div>`;
+  const notes=[...S.coachNotes].reverse().slice(0,1);
+  document.getElementById('coachNote').innerHTML = (S.coach && notes.length) ? notes.map(n=>`<div class="note"><div class="from">Nota do coach ${esc(COACH.name)} · ${niceDate(n.date)}</div>${esc(n.text)}</div>`).join('') : '';
+  const wk=plan[wi];
+  document.getElementById('planWeek').innerHTML = `<div class="card"><div class="row" style="margin-bottom:4px;"><h3 style="margin:0;">Esta semana</h3>${wk.recovery?'<span class="badge mint">Semana de recuperação</span>':''}${wk.last&&G.type==='prova'?'<span class="badge coral">Semana da prova</span>':''}</div>${wk.sessions.map(s=>sessHtml(s,S.planDone,S.logs,true)).join('')}</div>`;
+  // sugestão para o treino longo
+  const longS=wk.sessions.find(s=>s.type==='longo'||s.type==='prova');
+  let sug='';
+  if(longS){
+    const fits=upcoming().filter(m=>(m.sport===G.sport || (G.sport==='corrida'&&m.sport==='trilho') || (G.sport==='caminhada'&&m.sport==='trilho')) && m.km>=longS.km*0.6 && m.km<=longS.km*1.5 && daysUntil(m.date)<=10);
+    sug = fits.length ? `<div class="card"><h3>Faz o treino longo em grupo</h3><p class="muted" style="margin:-4px 0 10px;">Estes encontros têm a distância certa para o teu treino de ${nm(longS.km)} km:</p>${fits.slice(0,2).map(meetCard).join('')}</div>`
+      : `<div class="card"><h3>Sugestão para o treino longo</h3><p class="muted" style="margin:-4px 0 10px;">Procura no mapa um trilho marcado com cerca de ${nm(longS.km)} km, ou cria um encontro para não ires sozinha/o.</p><div class="two"><button class="primary" onclick="goView('mapa')">Ver trilhos</button><button class="ghost" style="margin:0;" onclick="openCreate({sport:'${G.sport==='corrida'||G.sport==='caminhada'?'trilho':G.sport}', date:'${longS.date}', title:'Treino longo de ${nm(longS.km)} km'})">Criar encontro</button></div></div>`;
+  }
+  document.getElementById('planSuggest').innerHTML=sug;
+  const nx=plan[wi+1];
+  document.getElementById('planNext').innerHTML = nx ? `<div class="card"><h3>Próxima semana</h3>${nx.sessions.map(s=>sessHtml(s,S.planDone,S.logs,false)).join('')}</div>` : '';
+}
+function doSession(key){
+  const plan=buildPlan(S.goal,S.logs), s=plan.flatMap(w=>w.sessions).find(x=>x.key===key); if(!s) return;
+  if(sessionDone(s,S.planDone,S.logs)){ delete S.planDone[key]; save(); renderTreino(); return; }
+  if(s.type==='forca'){ S.planDone[key]=true; save(); renderTreino(); toast('Força feita 💪'); return; }
+  openLog(null, null, {sport:s.sport, km:s.km, date:s.date<=addDays(0)?s.date:addDays(0), key:s.key});
+}
+
+/* ---------- registos: ritmo e recordes ---------- */
+function paceTxt(l){
+  const km=Number(l.km), min=Number(l.min); if(!(km>0 && min>0)) return '';
+  if(l.sport==='bike'||l.sport==='btt') return nm(km/(min/60))+' km/h';
+  if(l.sport==='natacao'){ const s=min*60/(km*10); return Math.floor(s/60)+':'+pad(Math.round(s%60))+' /100 m'; }
+  const p=min/km; return Math.floor(p)+':'+pad(Math.round((p%1)*60))+' /km';
+}
+function renderRecords(){
+  const box=document.getElementById('records'); if(!box) return;
+  const L=S.logs; if(!L.length){ box.innerHTML='<div class="empty" style="padding:10px;">Os recordes aparecem depois dos primeiros treinos.</div>'; return; }
+  const runs=L.filter(l=>['corrida','trilho'].includes(l.sport) && l.km>0 && l.min>0);
+  const bestPace=runs.length? runs.reduce((a,b)=>(b.min/b.km < a.min/a.km ? b : a)) : null;
+  const longest=L.reduce((a,b)=>(Number(b.km)>Number(a.km)?b:a));
+  const month=L.filter(l=>l.date.slice(0,7)===addDays(0).slice(0,7));
+  const total=month.reduce((a,l)=>a+Number(l.km||0),0), mins=month.reduce((a,l)=>a+Number(l.min||0),0);
+  box.innerHTML=`<div class="rec-grid">
+    <div class="rec"><div class="l">Melhor ritmo a correr</div><div class="v">${bestPace?paceTxt(bestPace):'—'}</div></div>
+    <div class="rec"><div class="l">Treino mais longo</div><div class="v">${nm(longest.km)} km</div></div>
+    <div class="rec"><div class="l">Este mês</div><div class="v">${nm(total)} km</div></div>
+    <div class="rec"><div class="l">Tempo este mês</div><div class="v">${fmtDur(mins)}</div></div></div>`;
+}
+
+/* ---------- gráfico simples ---------- */
+function lineChart(rows, key, unit, color){
+  const pts=rows.filter(r=>r[key]!=null && r[key]!=='').sort((a,b)=>a.date.localeCompare(b.date));
+  if(pts.length<2) return `<div class="tiny" style="padding:8px 0;">Faz pelo menos 2 medições para ver a evolução.</div>`;
+  const W=340,H=130,P=28, vals=pts.map(p=>Number(p[key]));
+  let lo=Math.min(...vals), hi=Math.max(...vals); if(hi-lo<1){ lo-=0.5; hi+=0.5; } const pad2=(hi-lo)*0.15; lo-=pad2; hi+=pad2;
+  const t0=parseDate(pts[0].date), t1=parseDate(pts[pts.length-1].date), span=Math.max(1,t1-t0);
+  const X=d=>P+ (parseDate(d)-t0)/span*(W-P-12), Y=v=>10+(hi-v)/(hi-lo)*(H-34);
+  const line=pts.map((p,i)=>(i?'L':'M')+X(p.date).toFixed(1)+' '+Y(p[key]).toFixed(1)).join(' ');
+  const area=line+` L${X(pts[pts.length-1].date).toFixed(1)} ${H-24} L${X(pts[0].date).toFixed(1)} ${H-24}Z`;
+  const last=pts[pts.length-1];
+  const f=d=>{const x=parseDate(d); return x.getDate()+' '+MONTHS[x.getMonth()];};
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Evolução">
+    <line x1="${P}" x2="${W-12}" y1="${H-24}" y2="${H-24}" stroke="var(--line)"/>
+    <line x1="${P}" x2="${W-12}" y1="${Y((lo+hi)/2)}" y2="${Y((lo+hi)/2)}" stroke="var(--line)" stroke-dasharray="3 4"/>
+    <text x="${P-6}" y="${Y((lo+hi)/2)+4}" font-size="10" text-anchor="end" fill="var(--ink-soft)">${nm((lo+hi)/2)}</text>
+    <path d="${area}" fill="${color}" fill-opacity=".10"/>
+    <path d="${line}" fill="none" stroke="${color}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    ${pts.map(p=>`<circle cx="${X(p.date).toFixed(1)}" cy="${Y(p[key]).toFixed(1)}" r="2.5" fill="${color}"/>`).join('')}
+    <circle cx="${X(last.date).toFixed(1)}" cy="${Y(last[key]).toFixed(1)}" r="5" fill="${color}" stroke="var(--card)" stroke-width="2"/>
+    <text x="${P}" y="${H-8}" font-size="10" fill="var(--ink-soft)">${f(pts[0].date)}</text>
+    <text x="${W-12}" y="${H-8}" font-size="10" text-anchor="end" fill="var(--ink-soft)">${f(last.date)} · ${nm(last[key])} ${unit}</text>
+  </svg>`;
+}
+
+/* ---------- CORPO ---------- */
+function deltaTxt(rows,key,unit,goodDown){
+  const p=rows.filter(r=>r[key]).sort((a,b)=>a.date.localeCompare(b.date)); if(p.length<2) return '';
+  const d=p[p.length-1][key]-p[0][key]; if(Math.abs(d)<0.05) return '<span class="delta" style="color:var(--ink-soft)">sem mudança</span>';
+  const good = goodDown===null ? null : (goodDown ? d<0 : d>0);
+  return `<span class="delta" style="color:${good===null?'var(--ink-soft)':good?'var(--mint)':'var(--coral)'}">${d>0?'+':''}${nm(d)} ${unit} desde o início</span>`;
+}
+function bodyPaneHtml(rows, editable){
+  const last=[...rows].sort((a,b)=>b.date.localeCompare(a.date))[0];
+  if(!last) return `<div class="card empty">${editable?'Ainda sem medições.<br>Regista o teu peso e, se tiveres balança com bioimpedância, a gordura e a massa muscular.':'Sem medições.'}</div>`;
+  return `<div class="stat3">
+      <div class="rec"><div class="l">Peso</div><div class="v">${last.weight?nm(last.weight)+' kg':'—'}</div>${deltaTxt(rows,'weight','kg',null)}</div>
+      <div class="rec"><div class="l">Massa muscular</div><div class="v">${last.muscle?nm(last.muscle)+' kg':'—'}</div>${deltaTxt(rows,'muscle','kg',false)}</div>
+      <div class="rec"><div class="l">Gordura</div><div class="v">${last.fat?nm(last.fat)+' %':'—'}</div>${deltaTxt(rows,'fat','%',true)}</div>
+    </div>
+    <div class="card"><h3>Peso</h3>${lineChart(rows,'weight','kg','var(--navy)')}</div>
+    <div class="card"><h3>Massa muscular</h3>${lineChart(rows,'muscle','kg','var(--mint)')}</div>
+    <div class="card"><h3>Histórico</h3>${[...rows].sort((a,b)=>b.date.localeCompare(a.date)).map(r=>`<div class="list-row"><span>${niceDate(r.date)}</span><span class="num muted" style="text-align:right;">${[r.weight&&nm(r.weight)+' kg', r.fat&&nm(r.fat)+'% gord.', r.muscle&&nm(r.muscle)+' kg músc.', r.waist&&nm(r.waist)+' cm cint.'].filter(Boolean).join(' · ')}</span></div>`).join('')}</div>`;
+}
+function renderBody(){
+  document.getElementById('pane-corpo').innerHTML = `<button class="primary" style="margin-bottom:12px;" onclick="openBody()">Nova medição</button>${bodyPaneHtml(S.body,true)}
+    <p class="tiny" style="text-align:center; margin:4px 8px 12px;">As tuas medições são privadas.${S.coach?(S.coach.share.corpo?' O teu coach pode vê-las.':' O teu coach não as vê.'):''}</p>`;
+}
+function openBody(){
+  const l=[...S.body].sort((a,b)=>b.date.localeCompare(a.date))[0]||{};
+  openSheet('Nova medição', `<div class="card">
+    <label for="bDate">Dia</label><input id="bDate" type="date" value="${addDays(0)}" max="${addDays(0)}">
+    <div class="two"><div><label for="bW">Peso (kg)</label><input id="bW" type="number" step="0.1" min="20" max="300" placeholder="${l.weight||''}"></div>
+    <div><label for="bF">Gordura (%)</label><input id="bF" type="number" step="0.1" min="3" max="70" placeholder="${l.fat||''}"></div></div>
+    <div class="two"><div><label for="bM">Massa muscular (kg)</label><input id="bM" type="number" step="0.1" min="10" max="120" placeholder="${l.muscle||''}"></div>
+    <div><label for="bC">Cintura (cm)</label><input id="bC" type="number" step="0.5" min="40" max="200" placeholder="${l.waist||''}"></div></div>
+    <p class="tiny" style="margin:-2px 0 10px;">Pesa-te de preferência de manhã, sempre à mesma hora. Preenche só o que tiveres.</p>
+    <button class="primary" onclick="saveBody()">Guardar medição</button></div>`);
+}
+function saveBody(){
+  const v=id=>{ const x=document.getElementById(id).value; return x===''?null:Number(x); };
+  const r={id:uid(), date:document.getElementById('bDate').value||addDays(0), weight:v('bW'), fat:v('bF'), muscle:v('bM'), waist:v('bC')};
+  if(!r.weight && !r.fat && !r.muscle && !r.waist){ toast('Preenche pelo menos um valor'); return; }
+  S.body.push(r); save(); closeSheet(); renderTreino(); toast('Medição guardada');
+}
+
+/* ---------- SAÚDE ---------- */
+function healthPaneHtml(rows, editable){
+  const last7=rows.filter(r=>daysUntil(r.date)>=-6).sort((a,b)=>b.date.localeCompare(a.date));
+  const avg=(k)=>{ const v=last7.map(r=>Number(r[k])).filter(x=>x>0); return v.length? v.reduce((a,b)=>a+b,0)/v.length : null; };
+  const pains=rows.filter(r=>r.pain).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,3);
+  return `<div class="stat3">
+      <div class="rec"><div class="l">Sono (média 7 dias)</div><div class="v">${avg('sleep')?nm(avg('sleep'))+' h':'—'}</div></div>
+      <div class="rec"><div class="l">Energia</div><div class="v">${avg('energy')?nm(avg('energy'))+'/5':'—'}</div></div>
+      <div class="rec"><div class="l">FC em repouso</div><div class="v">${avg('hr')?Math.round(avg('hr'))+' bpm':'—'}</div></div>
+    </div>
+    ${pains.length?`<div class="card"><h3>Dores registadas</h3>${pains.map(p=>`<div class="list-row"><span>${niceDate(p.date)}</span><span class="muted">${esc(p.painWhere||'Dor')}</span></div>`).join('')}${editable?'<div class="safety" style="margin-top:10px;">Se a dor dura mais de alguns dias ou piora a treinar, para e fala com um médico ou fisioterapeuta.</div>':''}</div>`:''}
+    <div class="card"><h3>Sono</h3>${lineChart(rows,'sleep','h','var(--navy)')}</div>
+    <div class="card"><h3>Últimos registos</h3>${rows.length?[...rows].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,10).map(r=>`<div class="list-row"><span>${niceDate(r.date)}</span><span class="num muted">${[r.sleep&&nm(r.sleep)+' h sono', r.energy&&'energia '+r.energy+'/5', r.hr&&r.hr+' bpm'].filter(Boolean).join(' · ')}</span></div>`).join(''):'<div class="empty" style="padding:10px;">Sem registos.</div>'}</div>`;
+}
+function renderHealth(){
+  const today=S.health.find(h=>h.date===addDays(0));
+  document.getElementById('pane-saude').innerHTML = `<div class="card"><h3>Como estás hoje?</h3>${today?`<p class="muted" style="margin:0 0 10px;">Já registaste hoje: ${nm(today.sleep)} h de sono, energia ${today.energy}/5.</p>`:'<p class="muted" style="margin:-4px 0 10px;">Um minuto por dia ajuda a perceber quando treinar forte e quando descansar.</p>'}<button class="primary mintbtn" onclick="openHealth()">${today?'Atualizar registo de hoje':'Registar o dia'}</button></div>
+    ${healthPaneHtml(S.health,true)}
+    <p class="tiny" style="text-align:center; margin:4px 8px 12px;">Isto não substitui o acompanhamento médico.${S.coach?(S.coach.share.saude?' O teu coach pode ver estes dados.':' O teu coach não vê estes dados.'):''}</p>`;
+}
+let hEnergy=3;
+function openHealth(){
+  const t=S.health.find(h=>h.date===addDays(0))||{}; hEnergy=t.energy||3;
+  openSheet('Registo do dia', `<div class="card">
+    <div class="two"><div><label for="hS">Horas de sono</label><input id="hS" type="number" step="0.5" min="0" max="16" value="${t.sleep||''}" placeholder="7"></div>
+    <div><label for="hHr">FC em repouso (bpm)</label><input id="hHr" type="number" min="30" max="140" value="${t.hr||''}" placeholder="Opcional"></div></div>
+    <label>Energia (1 = sem energia, 5 = cheia/o de energia)</label>
+    <div class="effort" id="hEn">${[1,2,3,4,5].map(n=>`<button type="button" class="${n===hEnergy?'on':''}" onclick="hEnergy=${n}; document.querySelectorAll('#hEn button').forEach((b,i)=>b.classList.toggle('on',i+1===${n}))">${n}</button>`).join('')}</div>
+    <div class="toggle-row" style="border:none;"><span>Tenho alguma dor</span><input id="hPain" type="checkbox" ${t.pain?'checked':''} onchange="document.getElementById('hPW').hidden=!this.checked"></div>
+    <div id="hPW" ${t.pain?'':'hidden'}><label for="hPWi">Onde?</label><input id="hPWi" placeholder="Ex.: joelho direito" value="${esc(t.painWhere||'')}"></div>
+    <button class="primary" onclick="saveHealth()">Guardar</button></div>`);
+}
+function saveHealth(){
+  const v=id=>{ const x=document.getElementById(id).value; return x===''?null:Number(x); };
+  const r={id:uid(), date:addDays(0), sleep:v('hS'), hr:v('hHr'), energy:hEnergy, pain:document.getElementById('hPain').checked, painWhere:(document.getElementById('hPWi')||{}).value||''};
+  S.health=S.health.filter(h=>h.date!==r.date); S.health.push(r); save(); closeSheet(); renderTreino();
+  toast(r.pain?'Guardado. Treina com cuidado hoje.':(r.energy<=2||(r.sleep&&r.sleep<6))?'Guardado. Hoje um treino leve é boa ideia.':'Guardado 💚');
+}
+
+/* ---------- MENTE ---------- */
+let breathT=null;
+function renderMind(){
+  const week=ymd(mondayOf(new Date()));
+  const intent=(S.intentions||{})[week]||'';
+  const moods=[...S.mind].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,7);
+  const refl=S.logs.filter(l=>l.answer).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5);
+  document.getElementById('pane-mente').innerHTML = `
+    <div class="card"><h3>Como te sentes hoje?</h3>
+      <div class="mood">${FEELINGS.map((f,i)=>`<button type="button" onclick="saveMood(${i+1})" aria-label="Humor ${i+1}" class="${(S.mind.find(m=>m.date===addDays(0))||{}).mood===i+1?'on':''}">${f}</button>`).join('')}</div>
+      ${moods.length?`<div class="tiny">Últimos dias: ${moods.map(m=>FEELINGS[m.mood-1]).reverse().join(' ')}</div>`:''}
+    </div>
+    <div class="card"><h3>Intenção da semana</h3>
+      <p class="muted" style="margin:-4px 0 8px;">Uma frase para guiar a semana. Ex.: "Vou treinar com calma e ouvir o meu corpo."</p>
+      <textarea id="intentIn" placeholder="A minha intenção é…">${esc(intent)}</textarea>
+      <button class="primary" onclick="saveIntent()">Guardar intenção</button>
+    </div>
+    <div class="card" style="text-align:center;"><h3 style="text-align:left;">Respiração 4-4-4-4</h3>
+      <p class="muted" style="margin:-4px 0 0; text-align:left;">Inspira 4 s, segura 4 s, expira 4 s, segura 4 s. Bom antes de uma prova ou depois de um dia difícil.</p>
+      <div class="breath" id="breathBall">Pronta/o?</div>
+      <button class="primary mintbtn" id="breathBtn" onclick="toggleBreath()">Começar (2 min)</button>
+    </div>
+    <div class="card"><h3>Reflexões 3S</h3>${refl.length?refl.map(l=>`<div class="reflect"><div class="tiny">${niceDate(l.date)} · ${esc(l.question)}</div><div style="margin-top:4px;">${esc(l.answer)}</div></div>`).join(''):'<div class="empty" style="padding:10px;">As tuas reflexões aparecem aqui depois de cada treino.</div>'}</div>`;
+}
+function saveMood(n){ S.mind=S.mind.filter(m=>m.date!==addDays(0)); S.mind.push({id:uid(), date:addDays(0), mood:n}); save(); renderTreino(); toast('Registado'); }
+function saveIntent(){ const week=ymd(mondayOf(new Date())); S.intentions=S.intentions||{}; S.intentions[week]=document.getElementById('intentIn').value.trim(); save(); toast('Intenção guardada'); }
+function toggleBreath(){
+  const ball=document.getElementById('breathBall'), btn=document.getElementById('breathBtn');
+  if(breathT){ clearInterval(breathT); breathT=null; ball.textContent='Muito bem'; ball.classList.remove('in'); btn.textContent='Começar (2 min)'; return; }
+  const steps=['Inspira','Segura','Expira','Segura']; let i=0, n=0;
+  const tick=()=>{ if(!document.getElementById('breathBall')){ clearInterval(breathT); breathT=null; return; }
+    const st=steps[i%4]; ball.textContent=st; ball.classList.toggle('in', st==='Inspira' || (st==='Segura' && i%4===1)); i++; n++;
+    if(n>30){ toggleBreath(); } };
+  tick(); breathT=setInterval(tick,4000); btn.textContent='Parar';
+}
+
+/* ---------- SESSÕES DE COACHING ---------- */
+function renderCoaching(){
+  const today=addDays(0);
+  const up=S.sessions.filter(s=>s.date>=today).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));
+  const past=S.sessions.filter(s=>s.date<today).sort((a,b)=>b.date.localeCompare(a.date));
+  const row=s=>`<div class="list-row" style="align-items:flex-start;"><div class="left" style="align-items:flex-start;"><span class="sport" style="width:40px;height:40px;font-size:16px;">${s.mode==='Online'?'💻':'🤝'}</span><div style="min-width:0;"><div style="font-weight:600;">${esc(s.type)}</div><div class="tiny">${niceDate(s.date)} · ${esc(s.time)} · ${esc(s.mode)}${isCoach()&&s.athlete?' · '+esc(s.athlete):''}</div>${s.topic?`<div class="tiny" style="margin-top:2px;">${esc(s.topic)}</div>`:''}</div></div><div style="display:flex; flex-direction:column; gap:6px; align-items:flex-end;"><span class="badge ${s.status==='confirmada'?'mint':'coral'}">${s.status==='confirmada'?'Confirmada':'Pedida'}</span>${(isCoach()&&s.status==='pedida'&&s.date>=today)?`<button class="primary small mintbtn" onclick="confirmSession('${s.id}')">Confirmar</button>`:''}${s.date>=today?`<button class="ghost small" onclick="cancelSession('${s.id}')">Desmarcar</button>`:''}</div></div>`;
+  document.getElementById('pane-coaching').innerHTML = `
+    ${isCoach()?'':`<div class="card"><div class="row" style="justify-content:flex-start; gap:12px; margin-bottom:10px;"><span class="av" style="width:46px;height:46px;font-size:16px;border:none;background:var(--navy);color:#fff;">${esc(initials(COACH.name))}</span><div><b>${esc(COACH.name)}</b><div class="tiny">${esc(COACH.title)}</div></div></div>
+      <div class="meta">${COACH.bio.map(b=>`<span class="badge">${esc(b)}</span>`).join('')}</div></div>`}
+    <button class="primary" style="margin-bottom:12px;" onclick="openSession()">${isCoach()?'Marcar sessão com atleta':'Marcar sessão'}</button>
+    <div class="card"><h3>Próximas sessões</h3>${up.length?up.map(row).join(''):'<div class="empty" style="padding:10px;">Sem sessões marcadas.</div>'}</div>
+    ${past.length?`<div class="card"><h3>Sessões anteriores</h3>${past.map(row).join('')}</div>`:''}
+    ${(!isCoach()&&S.coachNotes.length)?`<div class="card"><h3>Notas do coach</h3>${[...S.coachNotes].reverse().map(n=>`<div class="note"><div class="from">${niceDate(n.date)}</div>${esc(n.text)}</div>`).join('')}</div>`:''}
+    `;
+}
+function openSession(){
+  const types = ['Sessão experimental · 20 min (gratuita)','Coaching desportivo','Mentoria 3S · Saber · Sentir · Ser','Avaliação física e plano'];
+  const ath = isCoach() ? `<label for="sAth">Atleta</label><select id="sAth">${(S.athletes||[]).map(a=>`<option>${esc(a.name)}</option>`).join('')}</select>` : '';
+  const hasTrial = !isCoach() && S.sessions.some(s=>s.type.startsWith('Sessão experimental'));
+  openSheet(isCoach()?'Marcar sessão':'Marcar sessão com '+COACH.name.split(' ')[0], `<div class="card">
+    ${ath}
+    <label for="sType">Tipo de sessão</label><select id="sType">${types.filter(t=>!(hasTrial&&t.startsWith('Sessão experimental'))).map(t=>`<option>${t}</option>`).join('')}</select>
+    <div class="two"><div><label for="sDate">Dia</label><input id="sDate" type="date" min="${addDays(1)}" value="${addDays(3)}"></div>
+    <div><label for="sTime">Hora</label><input id="sTime" type="time" value="19:00"></div></div>
+    <label for="sMode">Como</label><select id="sMode"><option>Online</option><option>Presencial</option></select>
+    <label for="sTopic">O que queres trabalhar?</label><textarea id="sTopic" placeholder="Ex.: preparar a minha primeira prova de trail"></textarea>
+    <button class="primary" onclick="saveSession()">${isCoach()?'Marcar':'Pedir sessão'}</button></div>`);
+}
+function saveSession(){
+  const g=id=>{ const e=document.getElementById(id); return e? e.value.trim() : ''; };
+  S.sessions.push({id:uid(), type:g('sType'), date:g('sDate')||addDays(3), time:g('sTime')||'19:00', mode:g('sMode'), topic:g('sTopic'), athlete:g('sAth')||null});
+  save(); closeSheet(); renderTreino(); toast(isCoach()?'Sessão marcada':'Pedido enviado ao coach');
+}
+function cancelSession(id){ S.sessions=S.sessions.filter(s=>s.id!==id); save(); renderTreino(); toast('Sessão desmarcada'); }
+
+/* ---------- COACH: atletas ---------- */
+function demoAthletes(){
+  const list = demoAthletesRaw();
+  list.forEach((a,ai)=>{
+    a.done={};
+    const past=buildPlan(a.goal,a.logs).flatMap(w=>w.sessions).filter(s=>s.date<addDays(0));
+    past.forEach((s,i)=>{
+      if(ai===2 && i===past.length-1) return; // a Marta falhou um treino
+      if(s.type==='forca'){ a.done[s.key]=true; return; }
+      const pace={trilho:8.2, corrida:5.4, caminhada:11, bike:3, natacao:25}[s.sport]||7;
+      a.logs.push({id:uid(), sport:s.sport, km:s.km, min:Math.round(s.km*pace*(1+(i%3)*0.03)), date:s.date, feel:4, effort:3});
+    });
+  });
+  return list;
+}
+function demoAthletesRaw(){
+  const mk=(sport,days,kmFn,minFn)=>{ const L=[]; for(let i=1;i<=24;i++){ if(!days.includes(i%7)) continue; const km=kmFn(i); L.push({id:uid(), sport, km, min:Math.round(minFn(km)), date:addDays(-i), feel:3+(i%3===0?1:0), effort:3}); } return L; };
+  const bodyFn=(w0,m0,f0)=>[28,21,14,7,0].map((d,i)=>({id:uid(), date:addDays(-d), weight:+(w0-i*0.4).toFixed(1), muscle:+(m0+i*0.15).toFixed(1), fat:+(f0-i*0.3).toFixed(1)}));
+  return [
+    {id:'a1', name:'Ana Rocha', since:addDays(-40), share:{treinos:true,corpo:true,saude:true},
+      goal:{type:'prova', name:'Trail Pé do Negro', sport:'trilho', km:18, date:addDays(48), days:4, level:'Médio'},
+      logs:mk('trilho',[1,3,6],i=>6+(i%5),km=>km*8.2), body:bodyFn(64.2,26.1,27.5), health:[0,1,2,3,4,5,6].map(d=>({id:uid(),date:addDays(-d),sleep:6.5+(d%3)*0.5,energy:3+(d%2),hr:58})), notes:[]},
+    {id:'a2', name:'Rui Lima', since:addDays(-90), share:{treinos:true,corpo:false,saude:false},
+      goal:{type:'prova', name:'Meia Maratona de Viana', sport:'corrida', km:21.1, date:addDays(33), days:5, level:'Avançado'},
+      logs:mk('corrida',[0,1,3,4,6],i=>8+(i%6),km=>km*5.3), body:[], health:[], notes:[]},
+    {id:'a3', name:'Marta Sousa', since:addDays(-12), share:{treinos:true,corpo:true,saude:false},
+      goal:{type:'forma', sport:'corrida', days:3, level:'Iniciante'},
+      logs:mk('corrida',[2,5],i=>3+(i%2),km=>km*7.4).slice(0,4), body:bodyFn(71.0,24.0,33.0).slice(2), health:[], notes:[]},
+  ];
+}
+function renderAthletes(){
+  const A=S.athletes||[];
+  document.getElementById('pane-atletas').innerHTML = `
+    <div class="card"><h3>O teu código de coach</h3><div class="row"><span class="big num" style="letter-spacing:2px;">${COACH.code}</span><span class="tiny" style="text-align:right;">Dá este código aos teus atletas<br>para se ligarem a ti.</span></div></div>
+    ${A.map(a=>{ const plan=buildPlan(a.goal,a.logs), pg=planProgress(plan,a.done||{},a.logs), last=[...a.logs].sort((x,y)=>y.date.localeCompare(x.date))[0];
+      const pct=pg.total?Math.round(pg.done/pg.total*100):0;
+      return `<button class="meet" onclick="openAthlete('${a.id}')"><span class="av" style="width:44px;height:44px;font-size:15px;border:none;">${esc(initials(a.name))}</span>
+        <span class="body"><span class="t" style="display:block">${esc(a.name)}</span>
+        <span class="where" style="display:block">${a.goal.type==='prova'?esc(a.goal.name)+' · '+daysUntil(a.goal.date)+' dias':'Ganhar forma · '+SPORTS[a.goal.sport].name}</span>
+        <span class="meta"><span class="badge ${pct>=70?'mint':pct>=40?'coral':'red'}">${pct}% do plano cumprido</span>${last?`<span class="badge">Último treino: ${niceDate(last.date).toLowerCase()}</span>`:''}</span></span></button>`; }).join('')}
+    <p class="tiny" style="text-align:center;">Atletas de exemplo, com dados fictícios. Na versão com servidor aparecem aqui os atletas reais que usarem o teu código.</p>`;
+}
+function openAthlete(id){
+  const a=(S.athletes||[]).find(x=>x.id===id); if(!a) return;
+  const plan=buildPlan(a.goal,a.logs), wi=Math.max(0,currentWeek(plan)), wk=plan[wi], pg=planProgress(plan,a.done||{},a.logs);
+  const logs=[...a.logs].sort((x,y)=>y.date.localeCompare(x.date)).slice(0,6);
+  openSheet(a.name, `
+    <div class="goal-top"><div class="eyebrow">${a.goal.type==='prova'?'Objetivo · prova':'Objetivo · ganhar forma'}</div>
+      <h2>${a.goal.type==='prova'?esc(a.goal.name)+' · '+nm(a.goal.km)+' km':SPORTS[a.goal.sport].name+', '+a.goal.days+'× por semana'}</h2>
+      <div style="font-size:13px; opacity:.85; position:relative; z-index:1;">${a.goal.type==='prova'?daysUntil(a.goal.date)+' dias para a prova · ':''}Semana ${wi+1} de ${plan.length} · ${pg.done} de ${pg.total} treinos feitos</div>
+      <button class="ghost small" style="color:#fff; border-color:rgba(255,255,255,.3); margin-top:10px;" onclick="adjustAthlete('${a.id}')">Ajustar plano</button></div>
+    <div class="card"><h3>Nota para ${esc(a.name.split(' ')[0])}</h3>
+      ${a.notes.length?a.notes.slice(-3).reverse().map(n=>`<div class="note"><div class="from">${niceDate(n.date)}</div>${esc(n.text)}</div>`).join(''):''}
+      <textarea id="noteIn" placeholder="Ex.: Boa semana! No sábado faz o longo mais devagar."></textarea>
+      <button class="primary" onclick="sendNote('${a.id}')">Enviar nota</button></div>
+    ${a.share.treinos?`<div class="card"><h3>Esta semana</h3>${wk.sessions.map(s=>sessHtml(s,a.done||{},a.logs,false)).join('')}</div>
+      <div class="card"><h3>Últimos treinos</h3>${logs.map(l=>`<div class="list-row"><div class="left"><span class="sport" style="width:36px;height:36px;font-size:16px;">${SPORTS[l.sport].ic}</span><div><div style="font-weight:600;">${nm(l.km)} km · ${fmtDur(l.min)}</div><div class="tiny">${niceDate(l.date)} · ${paceTxt(l)}</div></div></div><span style="font-size:16px;">${FEELINGS[(l.feel||3)-1]}</span></div>`).join('')}</div>`
+      :'<div class="card empty">Este atleta não partilha os treinos.</div>'}
+    ${a.share.corpo? `<h3 style="margin:6px 4px 10px;">Corpo</h3>`+bodyPaneHtml(a.body,false) : '<div class="card empty">Este atleta não partilha as medições do corpo.</div>'}
+    ${a.share.saude? `<h3 style="margin:6px 4px 10px;">Saúde</h3>`+healthPaneHtml(a.health,false) : '<div class="card empty">Este atleta não partilha os dados de saúde.</div>'}
+  `);
+}
+function sendNote(id){
+  const a=S.athletes.find(x=>x.id===id), t=document.getElementById('noteIn').value.trim(); if(!t){ toast('Escreve a nota'); return; }
+  a.notes.push({date:addDays(0), text:t}); save(); openAthlete(id); toast('Nota enviada a '+a.name.split(' ')[0]);
+}
+function adjustAthlete(id){
+  const a=S.athletes.find(x=>x.id===id);
+  openSheet('Ajustar plano · '+a.name.split(' ')[0], `<div class="card">
+    <label>Dias de treino por semana</label>
+    <div class="opt-grid" style="grid-template-columns:repeat(4,1fr);" id="adDays">${[2,3,4,5].map(n=>`<button type="button" class="${a.goal.days===n?'on':''}" onclick="adjDays('${id}',${n})">${n} dias</button>`).join('')}</div>
+    <label for="adLevel">Nível</label><select id="adLevel" onchange="adjLevel('${id}',this.value)">${levelOptions(a.goal.level)}</select>
+    ${a.goal.type==='prova'?`<label for="adKm">Distância da prova (km)</label><input id="adKm" type="number" step="0.5" value="${a.goal.km}" onchange="adjKm('${id}',this.value)">`:''}
+    <button class="primary" onclick="openAthlete('${id}')">Ver plano atualizado</button></div>`);
+}
+function adjDays(id,n){ const a=S.athletes.find(x=>x.id===id); a.goal.days=n; save(); document.querySelectorAll('#adDays button').forEach((b,i)=>b.classList.toggle('on',[2,3,4,5][i]===n)); toast('Plano ajustado'); }
+function adjLevel(id,v){ const a=S.athletes.find(x=>x.id===id); a.goal.level=v; save(); toast('Plano ajustado'); }
+function adjKm(id,v){ const a=S.athletes.find(x=>x.id===id); a.goal.km=Number(v)||a.goal.km; save(); toast('Plano ajustado'); }
+
+/* =========================================================
+   LIGAÇÃO AO SUPABASE (projeto escola-3s)
+   As funções abaixo substituem as versões de demonstração:
+   cada ação grava na base de dados e depois recarrega os dados.
+   ========================================================= */
+const SUPABASE_URL = 'https://hspekqrhttxeckghtryi.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhzcGVrcXJodHR4ZWNrZ2h0cnlpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgyNTc2OTQsImV4cCI6MjEwMzgzMzY5NH0.2MKWYnUYWbxJqogSzpsfbkVHD_J0QqqMse-duNtj_GI';
+const sb = (window.supabase && window.supabase.createClient) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
+const PERFIL_COLS = 'user_id,nome,zona,nivel,modalidades,papel,titulo,bio';
+let ME = null;        // id da conta com sessão
+let IS_DONA = false;
+
+/* ---------- utilidades ---------- */
+function save(){ /* os dados vivem no Supabase; aqui guarda-se só a localização no telemóvel */
+  try{ if(S && S.me && S.me.lat) localStorage.setItem('mov_loc', JSON.stringify([S.me.lat,S.me.lng])); }catch(e){}
+}
+function myLoc(){ try{ return JSON.parse(localStorage.getItem('mov_loc')||'null'); }catch(e){ return null; } }
+function mapId(id){ return id===ME ? 'me' : id; }
+function unId(id){ return id==='me' ? ME : id; }
+async function q(promise, msg){
+  const {data, error} = await promise;
+  if(error){ console.error(error); toast(msg || ('Não foi possível guardar: '+(error.message||'erro'))); throw error; }
+  return data;
+}
+let busy=false;
+async function refresh(){ await loadAll(); renderAll(); if(currentView==='mapa') initMap(); }
+
+/* ---------- carregar tudo ---------- */
+async function loadAll(){
+  const today=addDays(0), from=addDays(-45);
+  const [perfis, encontros, insc, msgs, disp, treinos, corpo, saude, mente, estado, lig, notas, sessoes] = await Promise.all([
+    q(sb.from('mov_perfis').select(PERFIL_COLS)),
+    q(sb.from('mov_encontros').select('*').gte('data', from).order('data')),
+    q(sb.from('mov_inscricoes').select('*')),
+    q(sb.from('mov_mensagens').select('*').order('created_at')),
+    q(sb.from('mov_disponibilidades').select('*').gte('data', today)),
+    q(sb.from('mov_treinos').select('*').order('data')),
+    q(sb.from('mov_corpo').select('*').order('data')),
+    q(sb.from('mov_saude').select('*').order('data')),
+    q(sb.from('mov_mente').select('*').order('data')),
+    q(sb.from('mov_estado').select('*')),
+    q(sb.from('mov_coach_ligacoes').select('*')),
+    q(sb.from('mov_notas_coach').select('*').order('created_at')),
+    q(sb.from('mov_sessoes').select('*').neq('estado','cancelada').order('data')),
+  ]);
+  const P={}; perfis.forEach(p=>P[p.user_id]=p);
+  const mine=P[ME];
+  const loc=myLoc();
+  S = S || {};
+  S.me = { id:'me', uid:ME, name:mine.nome, zone:mine.zona||'', level:mine.nivel, sports:(mine.modalidades&&mine.modalidades.length)?mine.modalidades:['caminhada'],
+           role:mine.papel, titulo:mine.titulo, bio:mine.bio||[], lat:loc?loc[0]:null, lng:loc?loc[1]:null };
+  S.people={}; perfis.forEach(p=>{ if(p.user_id!==ME) S.people[p.user_id]={name:p.nome, zone:p.zona||'', level:p.nivel, role:p.papel}; });
+
+  const myLogs = treinos.filter(t=>t.user_id===ME);
+  const loggedMeets = new Set(myLogs.map(t=>t.encontro_id).filter(Boolean));
+  S.meets = encontros.map(e=>{
+    const ins=insc.filter(i=>i.encontro_id===e.id);
+    return {id:e.id, sport:e.modalidade, title:e.titulo, date:e.data, time:(e.hora||'').slice(0,5), place:e.local, lat:e.lat, lng:e.lng,
+      level:e.nivel, km:Number(e.km), dur:e.duracao, spots:e.vagas, approval:e.aprovacao, bring:e.levar||'', host:mapId(e.host_id),
+      going: ins.filter(i=>i.estado==='confirmado').map(i=>mapId(i.user_id)),
+      pending: ins.filter(i=>i.estado==='pendente').map(i=>mapId(i.user_id)),
+      chat: msgs.filter(m=>m.encontro_id===e.id).map(m=>({who:mapId(m.user_id), text:m.texto})),
+      logged: loggedMeets.has(e.id)};
+  });
+  S.free = disp.map(d=>({id:d.id, who:mapId(d.user_id), sport:d.modalidade, date:d.data, from:(d.de||'').slice(0,5), to:(d.ate||'').slice(0,5), zone:d.zona||''}));
+  const mapLog = t=>({id:t.id, sport:t.modalidade, km:Number(t.km), min:Number(t.minutos), date:t.data, effort:t.esforco, feel:t.sentir,
+      question:t.pergunta, answer:t.resposta, meetId:t.encontro_id, key:t.sessao_key, title:(S.meets.find(m=>m.id===t.encontro_id)||{}).title||null});
+  S.logs = myLogs.map(mapLog);
+  const mapBody = c=>({id:c.id, date:c.data, weight:c.peso!=null?Number(c.peso):null, fat:c.gordura!=null?Number(c.gordura):null, muscle:c.musculo!=null?Number(c.musculo):null, waist:c.cintura!=null?Number(c.cintura):null});
+  const mapHealth = h=>({id:h.id, date:h.data, sleep:h.sono!=null?Number(h.sono):null, energy:h.energia, hr:h.fc, pain:h.dor, painWhere:h.dor_onde||''});
+  S.body = corpo.filter(c=>c.user_id===ME).map(mapBody);
+  S.health = saude.filter(h=>h.user_id===ME).map(mapHealth);
+  S.mind = mente.map(m=>({id:m.id, date:m.data, mood:m.humor}));
+  const est = estado.find(e=>e.user_id===ME);
+  S.goal = est ? est.objetivo : null;
+  S.planDone = est ? (est.plano_feito||{}) : {};
+  S.intentions = est ? (est.intencoes||{}) : {};
+  S.goalKm = est ? Number(est.meta_km)||15 : 15;
+  S.hasEstado = !!est;
+
+  // atleta: o meu coach
+  const myLink = lig.find(l=>l.atleta_id===ME);
+  if(myLink && P[myLink.coach_id]){
+    const c=P[myLink.coach_id];
+    S.coach = {coachId:myLink.coach_id, share:{treinos:myLink.partilha_treinos, corpo:myLink.partilha_corpo, saude:myLink.partilha_saude}};
+    COACH = {name:c.nome, title:c.titulo||'Coach desportivo', bio:c.bio||[], code:''};
+  } else {
+    S.coach = null;
+    COACH = {...COACH_DESTAQUE};
+  }
+  S.coachNotes = notas.filter(n=>n.atleta_id===ME).map(n=>({date:n.created_at.slice(0,10), text:n.texto}));
+  S.sessions = sessoes.map(s=>({id:s.id, type:s.tipo, date:s.data, time:(s.hora||'').slice(0,5), mode:s.modo, topic:s.tema||'',
+    athleteId:s.atleta_id, athlete: s.atleta_id===ME ? null : (P[s.atleta_id]||{}).nome, coachId:s.coach_id, status:s.estado}));
+
+  // coach: os meus atletas
+  if(S.me.role==='coach'){
+    const code = await q(sb.rpc('mov_meu_codigo'));
+    COACH = {name:S.me.name, title:S.me.titulo||'Coach desportivo', bio:S.me.bio||[], code:code||''};
+    S.athletes = lig.filter(l=>l.coach_id===ME).map(l=>{
+      const a=P[l.atleta_id]||{nome:'Atleta'}; const e=estado.find(x=>x.user_id===l.atleta_id);
+      return {id:l.atleta_id, name:a.nome, since:l.created_at.slice(0,10),
+        share:{treinos:l.partilha_treinos, corpo:l.partilha_corpo, saude:l.partilha_saude},
+        goal: e && e.objetivo ? e.objetivo : null, done: e ? (e.plano_feito||{}) : {},
+        logs: treinos.filter(t=>t.user_id===l.atleta_id).map(mapLog),
+        body: corpo.filter(c=>c.user_id===l.atleta_id).map(mapBody),
+        health: saude.filter(h=>h.user_id===l.atleta_id).map(mapHealth),
+        notes: notas.filter(n=>n.atleta_id===l.atleta_id).map(n=>({date:n.created_at.slice(0,10), text:n.texto}))};
+    });
+  } else S.athletes = [];
+}
+function ptInit(){ /* os dados vêm do Supabase (loadAll) */ }
+
+/* ---------- estado (objetivo, plano, intenções, meta) ---------- */
+async function saveEstado(){
+  await q(sb.from('mov_estado').upsert({user_id:ME, objetivo:S.goal, plano_feito:S.planDone||{}, intencoes:S.intentions||{}, meta_km:S.goalKm||15, updated_at:new Date().toISOString()}));
+}
+
+/* ---------- entrada / conta ---------- */
+let authMode='entrar';
+function setAuthMode(m){
+  authMode=m;
+  document.querySelectorAll('#authTabs button').forEach((b,i)=>b.classList.toggle('on',(i===0)===(m==='entrar')));
+  document.getElementById('signupFields').hidden = m!=='criar';
+  document.getElementById('authBtn').textContent = m==='criar' ? 'Criar conta' : 'Entrar';
+  document.getElementById('lgPass').autocomplete = m==='criar' ? 'new-password' : 'current-password';
+}
+async function doAuth(){
+  if(!sb){ toast('Sem ligação à internet'); return; }
+  const email=document.getElementById('lgEmail').value.trim(), pass=document.getElementById('lgPass').value;
+  if(!email || !pass){ toast('Escreve o email e a palavra-passe'); return; }
+  const btn=document.getElementById('authBtn'); btn.disabled=true;
+  try{
+    if(authMode==='criar'){
+      const name=document.getElementById('lgName').value.trim();
+      if(!name){ toast('Escreve o teu nome'); return; }
+      if(pass.length<8){ toast('A palavra-passe precisa de pelo menos 8 caracteres'); return; }
+      const {data, error} = await sb.auth.signUp({email, password:pass, options:{emailRedirectTo: location.origin+location.pathname}});
+      if(error){ toast(authErr(error)); return; }
+      try{ localStorage.setItem('mov_perfil_pendente', JSON.stringify(profileFromForm())); }catch(e){}
+      if(!data.session){ showAuthMsg('Enviámos um email para '+email+'. Abre o link para confirmar a conta e depois entra aqui.'); return; }
+      await afterLogin(data.session.user);
+    } else {
+      const {data, error} = await sb.auth.signInWithPassword({email, password:pass});
+      if(error){ toast(authErr(error)); return; }
+      await afterLogin(data.user);
+    }
+  } finally { btn.disabled=false; }
+}
+function authErr(e){
+  const m=(e.message||'').toLowerCase();
+  if(m.includes('invalid login')) return 'Email ou palavra-passe errados';
+  if(m.includes('already registered')) return 'Já existe uma conta com este email. Usa "Entrar".';
+  if(m.includes('email not confirmed')) return 'Confirma primeiro o email (vê a tua caixa de correio)';
+  return 'Não foi possível entrar: '+e.message;
+}
+async function forgotPass(){
+  const email=document.getElementById('lgEmail').value.trim();
+  if(!email){ toast('Escreve primeiro o teu email'); return; }
+  const {error}=await sb.auth.resetPasswordForEmail(email, {redirectTo: location.origin+location.pathname});
+  showAuthMsg(error? 'Não foi possível enviar: '+error.message : 'Se existir uma conta, recebes um email para mudar a palavra-passe.');
+}
+function showAuthMsg(t){ const b=document.getElementById('authMsg'); b.textContent=t; b.hidden=false; }
+function profileFromForm(){
+  return {nome:document.getElementById('lgName').value.trim(), zona:document.getElementById('lgZone').value.trim(),
+          nivel:document.getElementById('lgLevel').value, modalidades:[...pickSports]};
+}
+async function afterLogin(user){
+  ME=user.id;
+  let {data:p} = await sb.from('mov_perfis').select(PERFIL_COLS).eq('user_id',ME).maybeSingle();
+  if(!p){
+    let pend=null; try{ pend=JSON.parse(localStorage.getItem('mov_perfil_pendente')||'null'); }catch(e){}
+    if(pend && pend.nome){
+      await q(sb.from('mov_perfis').insert({user_id:ME, ...pend}));
+      try{ localStorage.removeItem('mov_perfil_pendente'); }catch(e){}
+    } else { showCompleteProfile(); return; }
+  }
+  try{ const {data:d}=await sb.rpc('is_dona',{uid:ME}); IS_DONA=!!d; }catch(e){ IS_DONA=false; }
+  await loadAll();
+  start();
+}
+function showCompleteProfile(){
+  document.getElementById('loginScreen').hidden=false;
+  document.getElementById('app').hidden=true;
+  document.getElementById('authTabs').hidden=true;
+  document.getElementById('emailFields').hidden=true;
+  document.getElementById('signupFields').hidden=false;
+  document.getElementById('authTitle').textContent='Completa o teu perfil';
+  const b=document.getElementById('authBtn'); b.textContent='Guardar e entrar'; b.onclick=saveCompleteProfile;
+}
+async function saveCompleteProfile(){
+  const f=profileFromForm(); if(!f.nome){ toast('Escreve o teu nome'); return; }
+  await q(sb.from('mov_perfis').insert({user_id:ME, ...f}));
+  const {data:{user}}=await sb.auth.getUser(); await afterLogin(user);
+}
+async function logout(){ await sb.auth.signOut(); try{ localStorage.removeItem('mov_loc'); }catch(e){} location.reload(); }
+function createProfile(){ doAuth(); }
+
+/* ---------- encontros ---------- */
+async function saveMeet(){
+  const g=id=>document.getElementById(id).value.trim();
+  const sport=g('cSport'), place=g('cPlace');
+  if(!place){ document.getElementById('cPlace').focus(); toast('Indica o ponto de encontro'); return; }
+  await q(sb.from('mov_encontros').insert({host_id:ME, modalidade:sport, titulo:g('cTitle')||SPORTS[sport].name+' em grupo', data:g('cDate')||addDays(1), hora:g('cTime')||'09:00',
+    local:place, nivel:g('cLevel'), km:Number(g('cKm'))||0, duracao:Number(g('cDur'))||60, vagas:Math.max(2,Number(g('cSpots'))||8),
+    aprovacao:g('cApproval')==='1', levar:g('cBring')||null, lat:pickLL?pickLL[0]:null, lng:pickLL?pickLL[1]:null}));
+  closeSheet(); await refresh(); toast('Encontro publicado');
+}
+async function joinMeet(id){
+  await q(sb.from('mov_inscricoes').insert({encontro_id:id, user_id:ME}), 'Não foi possível inscrever (o encontro pode estar cheio)');
+  await refresh(); const m=S.meets.find(x=>x.id===id);
+  toast(m && m.approval ? 'Pedido enviado ao organizador' : 'Estás inscrita/o! 🎉'); openMeet(id);
+}
+async function leaveMeet(id){ await q(sb.from('mov_inscricoes').delete().eq('encontro_id',id).eq('user_id',ME)); closeSheet(); await refresh(); toast('Saíste do encontro'); }
+async function cancelMeet(id){ await q(sb.from('mov_encontros').delete().eq('id',id)); closeSheet(); await refresh(); toast('Encontro cancelado'); }
+async function approveMember(meetId, uid){ await q(sb.from('mov_inscricoes').update({estado:'confirmado'}).eq('encontro_id',meetId).eq('user_id',uid), 'Não foi possível aprovar (pode estar cheio)'); await refresh(); openMeet(meetId); toast('Aprovado'); }
+async function sendChat(id){
+  const inp=document.getElementById('chatIn'), t=inp.value.trim(); if(!t) return;
+  inp.value='';
+  await q(sb.from('mov_mensagens').insert({encontro_id:id, user_id:ME, texto:t}));
+  const msgs=await q(sb.from('mov_mensagens').select('*').eq('encontro_id',id).order('created_at'));
+  const m=S.meets.find(x=>x.id===id); m.chat=msgs.map(x=>({who:mapId(x.user_id), text:x.texto}));
+  document.getElementById('chatBox').innerHTML=chatHtml(m);
+}
+
+/* ---------- disponibilidade ---------- */
+async function saveFree(){
+  const g=id=>document.getElementById(id).value.trim();
+  await q(sb.from('mov_disponibilidades').insert({user_id:ME, modalidade:g('fSport'), data:g('fDate')||addDays(1), de:g('fFrom')||'18:00', ate:g('fTo')||'20:00', zona:g('fZone')||S.me.zone}));
+  await refresh();
+  const match=S.free.filter(f=>f.who!=='me' && f.date===g('fDate') && f.sport===g('fSport')).length;
+  toast(match? match+' pessoa(s) livres na mesma altura!' : 'Disponibilidade publicada');
+  openFree();
+}
+async function removeFree(id){ await q(sb.from('mov_disponibilidades').delete().eq('id',id)); await refresh(); openFree(); }
+
+/* ---------- treinos ---------- */
+async function saveLog(meetId, question){
+  const g=id=>document.getElementById(id).value.trim();
+  const km=Number(g('lKm')), min=Number(g('lMin'));
+  if(!(km>0) && !(min>0)){ toast('Indica a distância ou o tempo'); return; }
+  const ta=document.createElement('textarea'); ta.innerHTML=question;
+  await q(sb.from('mov_treinos').insert({user_id:ME, modalidade:g('lSport'), km:km||0, minutos:min||0, data:g('lDate')||addDays(0), esforco:logEffort, sentir:logFeel,
+    pergunta:ta.value, resposta:g('lAnswer')||null, encontro_id:meetId||null, sessao_key:(logPreset&&logPreset.key)||null}));
+  if(logPreset && logPreset.key){ S.planDone=S.planDone||{}; S.planDone[logPreset.key]=true; await saveEstado(); }
+  logPreset=null;
+  closeSheet(); await refresh();
+  const wk=weekLogs().reduce((a,l)=>a+Number(l.km||0),0);
+  toast(wk>=S.goalKm ? 'Meta da semana cumprida! 🎉' : 'Treino guardado 💪');
+}
+async function saveGoal(){ const v=Number(document.getElementById('gKm').value); if(v>0){ S.goalKm=v; await saveEstado(); } closeSheet(); await refresh(); toast('Meta atualizada'); }
+
+/* ---------- objetivo e plano ---------- */
+async function saveGoalForm(){
+  const g=id=>document.getElementById(id).value.trim();
+  const goal={type:gf.type, sport:g('gfSport'), days:gf.days||3, level:g('gfLevel'), created:addDays(0)};
+  if(goal.type==='prova'){
+    goal.name=g('gfName')||'A minha prova'; goal.km=Number(g('gfKm'))||10; goal.date=g('gfDate');
+    if(!goal.date || daysUntil(goal.date)<14){ toast('Escolhe uma data com pelo menos 2 semanas'); return; }
+  }
+  S.goal=goal; S.planDone={}; await saveEstado(); closeSheet(); await refresh(); toast('Plano criado 💪');
+}
+async function doSession(key){
+  const plan=buildPlan(S.goal,S.logs), s=plan.flatMap(w=>w.sessions).find(x=>x.key===key); if(!s) return;
+  if(sessionDone(s,S.planDone,S.logs)){ if(S.planDone[key]){ delete S.planDone[key]; await saveEstado(); await refresh(); } return; }
+  if(s.type==='forca'){ S.planDone[key]=true; await saveEstado(); await refresh(); toast('Força feita 💪'); return; }
+  openLog(null, null, {sport:s.sport, km:s.km, date:s.date<=addDays(0)?s.date:addDays(0), key:s.key});
+}
+
+/* ---------- corpo, saúde, mente ---------- */
+async function saveBody(){
+  const v=id=>{ const x=document.getElementById(id).value; return x===''?null:Number(x); };
+  const r={user_id:ME, data:document.getElementById('bDate').value||addDays(0), peso:v('bW'), gordura:v('bF'), musculo:v('bM'), cintura:v('bC')};
+  if(r.peso==null && r.gordura==null && r.musculo==null && r.cintura==null){ toast('Preenche pelo menos um valor'); return; }
+  await q(sb.from('mov_corpo').insert(r)); closeSheet(); await refresh(); toast('Medição guardada');
+}
+async function saveHealth(){
+  const v=id=>{ const x=document.getElementById(id).value; return x===''?null:Number(x); };
+  const r={user_id:ME, data:addDays(0), sono:v('hS'), fc:v('hHr'), energia:hEnergy, dor:document.getElementById('hPain').checked, dor_onde:(document.getElementById('hPWi')||{}).value||null};
+  await q(sb.from('mov_saude').upsert(r, {onConflict:'user_id,data'})); closeSheet(); await refresh();
+  toast(r.dor?'Guardado. Treina com cuidado hoje.':(r.energia<=2||(r.sono&&r.sono<6))?'Guardado. Hoje um treino leve é boa ideia.':'Guardado 💚');
+}
+async function saveMood(n){ await q(sb.from('mov_mente').upsert({user_id:ME, data:addDays(0), humor:n}, {onConflict:'user_id,data'})); await refresh(); toast('Registado'); }
+async function saveIntent(){ const week=ymd(mondayOf(new Date())); S.intentions=S.intentions||{}; S.intentions[week]=document.getElementById('intentIn').value.trim(); await saveEstado(); toast('Intenção guardada'); }
+
+/* ---------- coach (lado do atleta) ---------- */
+const COACH_DESTAQUE = {name:'Valter Canhita', code:'', title:'Coach desportivo certificado',
+  bio:['Coach certificado','Ironman','Paraquedista e formador de recrutas','Liderança e formação de equipas corporativas']};
+async function connectCoach(){
+  const c=document.getElementById('coachCode').value.trim(); if(!c){ toast('Escreve o código do coach'); return; }
+  const {error}=await sb.rpc('mov_ligar_coach',{p_codigo:c});
+  if(error){ toast(error.message.includes('inválido')?'Código errado. Confirma com o teu coach.':'Não foi possível ligar: '+error.message); return; }
+  await refresh(); toast('Ligado ao coach '+COACH.name.split(' ')[0]);
+}
+async function disconnectCoach(){ await q(sb.from('mov_coach_ligacoes').delete().eq('atleta_id',ME)); await refresh(); toast('Desligado do coach'); }
+async function setShare(k,v){
+  const col={treinos:'partilha_treinos', corpo:'partilha_corpo', saude:'partilha_saude'}[k];
+  await q(sb.from('mov_coach_ligacoes').update({[col]:v}).eq('atleta_id',ME)); S.coach.share[k]=v; toast(v?'O coach passa a ver isto':'O coach deixa de ver isto');
+}
+
+/* ---------- sessões de coaching ---------- */
+function openSession(){
+  if(!isCoach() && !S.coach){ toast('Liga-te primeiro a um coach (no fim do painel PT 3S)'); return; }
+  const types = ['Sessão experimental · 20 min (gratuita)','Coaching desportivo','Mentoria 3S · Saber · Sentir · Ser','Avaliação física e plano'];
+  const ath = isCoach() ? (S.athletes.length? `<label for="sAth">Atleta</label><select id="sAth">${S.athletes.map(a=>`<option value="${a.id}">${esc(a.name)}</option>`).join('')}</select>` : '<p class="muted">Ainda não tens atletas ligados.</p>') : '';
+  const hasTrial = !isCoach() && S.sessions.some(s=>s.type.startsWith('Sessão experimental'));
+  openSheet(isCoach()?'Marcar sessão':'Marcar sessão com '+COACH.name.split(' ')[0], `<div class="card">
+    ${ath}
+    <label for="sType">Tipo de sessão</label><select id="sType">${types.filter(t=>!(hasTrial&&t.startsWith('Sessão experimental'))).map(t=>`<option>${t}</option>`).join('')}</select>
+    <div class="two"><div><label for="sDate">Dia</label><input id="sDate" type="date" min="${addDays(1)}" value="${addDays(3)}"></div>
+    <div><label for="sTime">Hora</label><input id="sTime" type="time" value="19:00"></div></div>
+    <label for="sMode">Como</label><select id="sMode"><option>Online</option><option>Presencial</option></select>
+    <label for="sTopic">O que queres trabalhar?</label><textarea id="sTopic" placeholder="Ex.: preparar a minha primeira prova de trail"></textarea>
+    <button class="primary" onclick="saveSession()">${isCoach()?'Marcar':'Pedir sessão'}</button></div>`);
+}
+async function saveSession(){
+  const g=id=>{ const e=document.getElementById(id); return e? e.value.trim() : ''; };
+  const atleta = isCoach() ? g('sAth') : ME, coach = isCoach() ? ME : S.coach.coachId;
+  if(!atleta){ toast('Escolhe o atleta'); return; }
+  await q(sb.from('mov_sessoes').insert({atleta_id:atleta, coach_id:coach, tipo:g('sType'), data:g('sDate')||addDays(3), hora:g('sTime')||'19:00', modo:g('sMode'), tema:g('sTopic')||null, estado:isCoach()?'confirmada':'pedida'}));
+  closeSheet(); await refresh(); toast(isCoach()?'Sessão marcada':'Pedido enviado ao coach');
+}
+async function cancelSession(id){ await q(sb.from('mov_sessoes').update({estado:'cancelada'}).eq('id',id)); await refresh(); toast('Sessão desmarcada'); }
+async function confirmSession(id){ await q(sb.from('mov_sessoes').update({estado:'confirmada'}).eq('id',id)); await refresh(); toast('Sessão confirmada'); }
+
+/* ---------- coach: atletas ---------- */
+function demoAthletes(){ return []; }
+function renderAthletes(){
+  const A=S.athletes||[];
+  document.getElementById('pane-atletas').innerHTML = `
+    <div class="card"><h3>O teu código de coach</h3><div class="row"><span class="big num" style="letter-spacing:2px;">${esc(COACH.code||'—')}</span><span class="tiny" style="text-align:right;">Dá este código aos teus atletas<br>para se ligarem a ti.</span></div></div>
+    ${A.length? A.map(a=>{ const plan=buildPlan(a.goal,a.logs), pg=planProgress(plan,a.done||{},a.logs), last=[...a.logs].sort((x,y)=>y.date.localeCompare(x.date))[0];
+      const pct=pg.total?Math.round(pg.done/pg.total*100):0;
+      return `<button class="meet" onclick="openAthlete('${a.id}')"><span class="av" style="width:44px;height:44px;font-size:15px;border:none;">${esc(initials(a.name))}</span>
+        <span class="body"><span class="t" style="display:block">${esc(a.name)}</span>
+        <span class="where" style="display:block">${!a.goal?'Ainda sem objetivo':a.goal.type==='prova'?esc(a.goal.name)+' · '+daysUntil(a.goal.date)+' dias':'Ganhar forma · '+SPORTS[a.goal.sport].name}</span>
+        <span class="meta">${a.goal?`<span class="badge ${pct>=70?'mint':pct>=40?'coral':'red'}">${pct}% do plano cumprido</span>`:''}${last?`<span class="badge">Último treino: ${niceDate(last.date).toLowerCase()}</span>`:''}</span></span></button>`; }).join('')
+      : '<div class="card empty">Ainda não tens atletas.<br>Quando alguém usar o teu código, aparece aqui.</div>'}`;
+}
+function openAthlete(id){
+  const a=(S.athletes||[]).find(x=>x.id===id); if(!a) return;
+  const plan=buildPlan(a.goal,a.logs), wi=Math.max(0,currentWeek(plan)), wk=plan[wi], pg=planProgress(plan,a.done||{},a.logs);
+  const logs=[...a.logs].sort((x,y)=>y.date.localeCompare(x.date)).slice(0,6);
+  openSheet(a.name, `
+    ${a.goal? `<div class="goal-top"><div class="eyebrow">${a.goal.type==='prova'?'Objetivo · prova':'Objetivo · ganhar forma'}</div>
+      <h2>${a.goal.type==='prova'?esc(a.goal.name)+' · '+nm(a.goal.km)+' km':SPORTS[a.goal.sport].name+', '+a.goal.days+'× por semana'}</h2>
+      <div style="font-size:13px; opacity:.85; position:relative; z-index:1;">${a.goal.type==='prova'?daysUntil(a.goal.date)+' dias para a prova · ':''}Semana ${wi+1} de ${plan.length} · ${pg.done} de ${pg.total} treinos feitos</div>
+      ${a.share.treinos?`<button class="ghost small" style="color:#fff; border-color:rgba(255,255,255,.3); margin-top:10px;" onclick="adjustAthlete('${a.id}')">Ajustar plano</button>`:''}</div>`
+      : '<div class="card empty">Este atleta ainda não definiu objetivo.</div>'}
+    <div class="card"><h3>Nota para ${esc(a.name.split(' ')[0])}</h3>
+      ${a.notes.slice(-3).reverse().map(n=>`<div class="note"><div class="from">${niceDate(n.date)}</div>${esc(n.text)}</div>`).join('')}
+      <textarea id="noteIn" placeholder="Ex.: Boa semana! No sábado faz o longo mais devagar."></textarea>
+      <button class="primary" onclick="sendNote('${a.id}')">Enviar nota</button></div>
+    ${a.share.treinos? (wk?`<div class="card"><h3>Esta semana</h3>${wk.sessions.map(s=>sessHtml(s,a.done||{},a.logs,false)).join('')}</div>`:'')+
+      `<div class="card"><h3>Últimos treinos</h3>${logs.length?logs.map(l=>`<div class="list-row"><div class="left"><span class="sport" style="width:36px;height:36px;font-size:16px;">${SPORTS[l.sport].ic}</span><div><div style="font-weight:600;">${nm(l.km)} km · ${fmtDur(l.min)}</div><div class="tiny">${niceDate(l.date)}${paceTxt(l)?' · '+paceTxt(l):''}</div></div></div><span style="font-size:16px;">${FEELINGS[(l.feel||3)-1]}</span></div>`).join(''):'<div class="empty" style="padding:10px;">Sem treinos registados.</div>'}</div>`
+      :'<div class="card empty">Este atleta não partilha os treinos.</div>'}
+    ${a.share.corpo? `<h3 style="margin:6px 4px 10px;">Corpo</h3>`+bodyPaneHtml(a.body,false) : '<div class="card empty">Este atleta não partilha as medições do corpo.</div>'}
+    ${a.share.saude? `<h3 style="margin:6px 4px 10px;">Saúde</h3>`+healthPaneHtml(a.health,false) : '<div class="card empty">Este atleta não partilha os dados de saúde.</div>'}
+  `);
+}
+async function sendNote(id){
+  const a=S.athletes.find(x=>x.id===id), t=document.getElementById('noteIn').value.trim(); if(!t){ toast('Escreve a nota'); return; }
+  await q(sb.from('mov_notas_coach').insert({coach_id:ME, atleta_id:id, texto:t})); await refresh(); openAthlete(id); toast('Nota enviada a '+a.name.split(' ')[0]);
+}
+async function saveAthleteGoal(a){ await q(sb.from('mov_estado').update({objetivo:a.goal, updated_at:new Date().toISOString()}).eq('user_id',a.id), 'Não foi possível ajustar o plano'); }
+async function adjDays(id,n){ const a=S.athletes.find(x=>x.id===id); a.goal.days=n; await saveAthleteGoal(a); document.querySelectorAll('#adDays button').forEach((b,i)=>b.classList.toggle('on',[2,3,4,5][i]===n)); toast('Plano ajustado'); }
+async function adjLevel(id,v){ const a=S.athletes.find(x=>x.id===id); a.goal.level=v; await saveAthleteGoal(a); toast('Plano ajustado'); }
+async function adjKm(id,v){ const a=S.athletes.find(x=>x.id===id); a.goal.km=Number(v)||a.goal.km; await saveAthleteGoal(a); toast('Plano ajustado'); }
+
+/* ---------- dona: dar acesso de coach ---------- */
+async function makeCoach(){
+  const email=document.getElementById('mkEmail').value.trim(), titulo=document.getElementById('mkTitle').value.trim()||'Coach desportivo';
+  const bio=document.getElementById('mkBio').value.split(',').map(s=>s.trim()).filter(Boolean);
+  if(!email){ toast('Escreve o email da conta do coach'); return; }
+  const {data, error}=await sb.rpc('mov_tornar_coach',{p_email:email, p_titulo:titulo, p_bio:bio});
+  if(error){ toast(error.message.includes('Não existe')?'Essa pessoa ainda não criou conta na app':'Erro: '+error.message); return; }
+  document.getElementById('mkResult').innerHTML=`Acesso de coach dado. Código para os atletas: <b>${esc(data)}</b>`;
+}
+
+/* ---------- conta ---------- */
+function askReset(){ document.getElementById('resetConfirm').hidden=false; }
+async function doReset(){
+  for(const t of ['mov_treinos','mov_corpo','mov_saude','mov_mente','mov_disponibilidades','mov_estado']) await q(sb.from(t).delete().eq('user_id',ME));
+  await q(sb.from('mov_coach_ligacoes').delete().eq('atleta_id',ME));
+  await q(sb.from('mov_encontros').delete().eq('host_id',ME));
+  await q(sb.from('mov_perfis').delete().eq('user_id',ME));
+  await logout();
+}
+
+/* ---------- (antigo) apagar ---------- */
 function askReset(){ document.getElementById('resetConfirm').hidden=false; }
 function doReset(){ try{ localStorage.removeItem(KEY); }catch(e){} S=null; location.reload(); }
 
@@ -904,15 +1971,29 @@ function doReset(){ try{ localStorage.removeItem(KEY); }catch(e){} S=null; locat
 function start(){
   document.getElementById('loginScreen').hidden=true;
   document.getElementById('app').hidden=false;
+  ptInit(); save();
+  document.getElementById('donaCard').hidden = !IS_DONA;
   try{ history.replaceState({view:'inicio'}, ''); }catch(e){}
   goView('inicio', true);
 }
-S = load();
-if(S){
-  const C={'Trilho do Mezio ao Soajo':[41.8987,-8.3197],'Caminhada à beira do Lima':[41.8070,-8.4180],'Corrida na Ecovia':[41.6915,-8.8320],'Volta de bike pela Ecopista':[41.7672,-8.5836],'Natação na piscina municipal':[41.8095,-8.4125]};
-  S.meets.forEach(m=>{ if(!m.lat && C[m.title]){ m.lat=C[m.title][0]; m.lng=C[m.title][1]; } });
-  start();
-} else { document.getElementById('loginScreen').hidden=false; renderLoginSports(); }
+S = null;
+(async function boot(){
+  renderLoginSports();
+  const showLogin=()=>{ document.getElementById('loginScreen').hidden=false; document.getElementById('app').hidden=true; };
+  if(!sb){ showLogin(); toast('Sem ligação à internet'); return; }
+  sb.auth.onAuthStateChange((ev)=>{ if(ev==='PASSWORD_RECOVERY') openNewPass(); });
+  const {data:{session}} = await sb.auth.getSession();
+  if(session){ try{ await afterLogin(session.user); }catch(e){ showLogin(); } }
+  else showLogin();
+})();
+function openNewPass(){
+  openSheet('Nova palavra-passe', `<div class="card"><label for="npw">Nova palavra-passe</label><input id="npw" type="password" autocomplete="new-password" placeholder="Mínimo 8 caracteres"><button class="primary" onclick="saveNewPass()">Guardar</button></div>`);
+}
+async function saveNewPass(){
+  const p=document.getElementById('npw').value; if(p.length<8){ toast('Mínimo 8 caracteres'); return; }
+  const {error}=await sb.auth.updateUser({password:p}); if(error){ toast('Erro: '+error.message); return; }
+  closeSheet(); toast('Palavra-passe alterada');
+}
 </script>
 </body>
 </html>
