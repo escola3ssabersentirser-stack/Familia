@@ -303,6 +303,8 @@
       <div class="pick" id="lgSports"></div>
       <label for="lgLevel">Nível</label>
       <select id="lgLevel"><option>Iniciante</option><option>Médio</option><option>Avançado</option></select>
+      <div class="note" style="margin:4px 0 10px; font-size:13px;"><div class="from">O teu coach</div>No 3S Movimento, o coach da Escola 3S acompanha os teus treinos e o teu plano para te ajudar a evoluir.</div>
+      <label style="display:flex; gap:10px; align-items:flex-start; font-size:13px; color:var(--ink); margin-bottom:12px;"><input id="lgConsent" type="checkbox" style="width:auto; margin:2px 0 0; accent-color:var(--navy); transform:scale(1.2);"><span>Aceito que o coach veja também o meu peso, medidas e dados de saúde (sono, energia, dores). Posso mudar isto quando quiser.</span></label>
     </div>
     <button class="primary" id="authBtn" onclick="doAuth()">Entrar</button>
     <button class="ghost" style="border:none; font-size:13px; color:var(--ink-soft);" onclick="forgotPass()">Esqueci-me da palavra-passe</button>
@@ -479,6 +481,7 @@
         <label for="mkEmail">Email da conta do coach</label><input id="mkEmail" type="email" placeholder="email@exemplo.pt">
         <label for="mkTitle">Título</label><input id="mkTitle" value="Coach desportivo certificado">
         <label for="mkBio">Apresentação (separada por vírgulas)</label><input id="mkBio" value="Coach certificado, Ironman, Paraquedista e formador de recrutas, Liderança e formação de equipas corporativas">
+        <label style="display:flex; gap:10px; align-items:center; font-size:13px; color:var(--ink); margin-bottom:12px;"><input id="mkPrincipal" type="checkbox" checked style="width:auto; margin:0; accent-color:var(--navy); transform:scale(1.2);"><span>Coach principal: acompanha todos os atletas e modera os encontros</span></label>
         <button class="primary" onclick="makeCoach()">Dar acesso de coach</button>
         <p class="tiny" id="mkResult" style="margin:10px 0 0;"></p>
       </div>
@@ -752,13 +755,14 @@ function openMeet(id){
   if(past && mine && !m.logged) btn=`<button class="primary mintbtn" onclick="openLog('${m.id}')">Registar como correu</button>`;
   else if(past) btn=`<div class="badge" style="display:inline-block;">Este encontro já aconteceu</div>`;
   else if(host) btn=`<button class="ghost" style="color:var(--red);" onclick="cancelMeet('${m.id}')">Cancelar encontro</button>`;
+  if(IS_MOD && !host) btn+=`<button class="ghost" style="color:var(--red); margin-top:8px;" onclick="modDeleteMeet('${m.id}')">Apagar encontro (moderação)</button>`;
   else if(mine) btn=`<button class="ghost" onclick="leaveMeet('${m.id}')">Já não vou</button>`;
   else if((m.pending||[]).includes('me')) btn=`<div class="badge coral" style="display:inline-block; margin-bottom:6px;">À espera de aprovação</div><button class="ghost" onclick="leaveMeet('${m.id}')">Cancelar pedido</button>`;
   else if(left<=0) btn=`<button class="primary" disabled>Encontro cheio</button>`;
   else btn=`<button class="primary" onclick="joinMeet('${m.id}')">${m.approval?'Pedir para ir':'Juntar-me'}</button>`;
 
-  const chat = (mine||host) ? `<div class="card"><h3>Conversa do grupo</h3><div id="chatBox">${chatHtml(m)}</div>
-      <div class="msg-row"><input id="chatIn" placeholder="Escreve uma mensagem" onkeydown="if(event.key==='Enter')sendChat('${m.id}')"><button class="primary" onclick="sendChat('${m.id}')">Enviar</button></div></div>`
+  const chat = (mine||host||IS_MOD) ? `<div class="card"><h3>Conversa do grupo</h3><div id="chatBox">${chatHtml(m)}</div>
+      ${(mine||host)?`<div class="msg-row"><input id="chatIn" placeholder="Escreve uma mensagem" onkeydown="if(event.key==='Enter')sendChat('${m.id}')"><button class="primary" onclick="sendChat('${m.id}')">Enviar</button></div>`:'<p class="tiny" style="margin:8px 0 0;">Estás a ver como moderador. Para escrever, junta-te ao encontro.</p>'}</div>`
     : `<div class="card"><h3>Conversa do grupo</h3><p class="muted" style="margin:0;">Junta-te ao encontro para falar com o grupo.</p></div>`;
 
   openSheet(sp.name, `
@@ -1194,10 +1198,10 @@ function coachCardHtml(){
     <div class="row" style="justify-content:flex-start; gap:12px; margin-bottom:8px;"><span class="av" style="width:46px;height:46px;font-size:16px;border:none;background:var(--navy);color:#fff;">${esc(initials(COACH.name))}</span><div><b>${esc(COACH.name)}</b><div class="tiny">${esc(COACH.title)} · ligado</div></div></div>
     <div class="meta" style="margin-bottom:8px;">${bio}</div>
     <div class="tiny" style="margin:6px 0 2px;">O que o coach pode ver:</div>
-    <div class="toggle-row"><span>Plano e treinos</span><input type="checkbox" ${sh.treinos?'checked':''} onchange="setShare('treinos',this.checked)"></div>
+    <div class="toggle-row"><span>Plano e treinos</span><span class="badge mint">Sempre partilhado</span></div>
     <div class="toggle-row"><span>Corpo (peso e medidas)</span><input type="checkbox" ${sh.corpo?'checked':''} onchange="setShare('corpo',this.checked)"></div>
     <div class="toggle-row"><span>Saúde (sono, energia, dores)</span><input type="checkbox" ${sh.saude?'checked':''} onchange="setShare('saude',this.checked)"></div>
-    <button class="ghost" onclick="disconnectCoach()">Desligar do coach</button></div>`;
+    <p class="tiny" style="margin:8px 0 0;">Podes ligar ou desligar o corpo e a saúde quando quiseres.</p></div>`;
 }
 function connectCoach(){
   const c=document.getElementById('coachCode').value.trim().toUpperCase();
@@ -1586,6 +1590,7 @@ const sb = (window.supabase && window.supabase.createClient) ? window.supabase.c
 const PERFIL_COLS = 'user_id,nome,zona,nivel,modalidades,papel,titulo,bio';
 let ME = null;        // id da conta com sessão
 let IS_DONA = false;
+let IS_MOD = false;
 
 /* ---------- utilidades ---------- */
 function save(){ /* os dados vivem no Supabase; aqui guarda-se só a localização no telemóvel */
@@ -1636,7 +1641,7 @@ async function loadAll(){
       level:e.nivel, km:Number(e.km), dur:e.duracao, spots:e.vagas, approval:e.aprovacao, bring:e.levar||'', host:mapId(e.host_id),
       going: ins.filter(i=>i.estado==='confirmado').map(i=>mapId(i.user_id)),
       pending: ins.filter(i=>i.estado==='pendente').map(i=>mapId(i.user_id)),
-      chat: msgs.filter(m=>m.encontro_id===e.id).map(m=>({who:mapId(m.user_id), text:m.texto})),
+      chat: msgs.filter(m=>m.encontro_id===e.id).map(m=>({id:m.id, who:mapId(m.user_id), text:m.texto})),
       logged: loggedMeets.has(e.id)};
   });
   S.free = disp.map(d=>({id:d.id, who:mapId(d.user_id), sport:d.modalidade, date:d.data, from:(d.de||'').slice(0,5), to:(d.ate||'').slice(0,5), zone:d.zona||''}));
@@ -1739,7 +1744,7 @@ async function forgotPass(){
 function showAuthMsg(t){ const b=document.getElementById('authMsg'); b.textContent=t; b.hidden=false; }
 function profileFromForm(){
   return {nome:document.getElementById('lgName').value.trim(), zona:document.getElementById('lgZone').value.trim(),
-          nivel:document.getElementById('lgLevel').value, modalidades:[...pickSports]};
+          nivel:document.getElementById('lgLevel').value, modalidades:[...pickSports], consentimento_coach:!!(document.getElementById('lgConsent')||{}).checked};
 }
 async function afterLogin(user){
   ME=user.id;
@@ -1752,6 +1757,7 @@ async function afterLogin(user){
     } else { showCompleteProfile(); return; }
   }
   try{ const {data:d}=await sb.rpc('is_dona',{uid:ME}); IS_DONA=!!d; }catch(e){ IS_DONA=false; }
+  try{ const {data:m}=await sb.rpc('mov_e_moderador'); IS_MOD=!!m; }catch(e){ IS_MOD=false; }
   await loadAll();
   start();
 }
@@ -1795,7 +1801,7 @@ async function sendChat(id){
   inp.value='';
   await q(sb.from('mov_mensagens').insert({encontro_id:id, user_id:ME, texto:t}));
   const msgs=await q(sb.from('mov_mensagens').select('*').eq('encontro_id',id).order('created_at'));
-  const m=S.meets.find(x=>x.id===id); m.chat=msgs.map(x=>({who:mapId(x.user_id), text:x.texto}));
+  const m=S.meets.find(x=>x.id===id); m.chat=msgs.map(x=>({id:x.id, who:mapId(x.user_id), text:x.texto}));
   document.getElementById('chatBox').innerHTML=chatHtml(m);
 }
 
@@ -1871,7 +1877,9 @@ async function connectCoach(){
 async function disconnectCoach(){ await q(sb.from('mov_coach_ligacoes').delete().eq('atleta_id',ME)); await refresh(); toast('Desligado do coach'); }
 async function setShare(k,v){
   const col={treinos:'partilha_treinos', corpo:'partilha_corpo', saude:'partilha_saude'}[k];
-  await q(sb.from('mov_coach_ligacoes').update({[col]:v}).eq('atleta_id',ME)); S.coach.share[k]=v; toast(v?'O coach passa a ver isto':'O coach deixa de ver isto');
+  await q(sb.from('mov_coach_ligacoes').update({[col]:v}).eq('atleta_id',ME)); S.coach.share[k]=v;
+  await q(sb.from('mov_perfis').update({consentimento_coach: !!(S.coach.share.corpo||S.coach.share.saude)}).eq('user_id',ME));
+  toast(v?'O coach passa a ver isto':'O coach deixa de ver isto');
 }
 
 /* ---------- sessões de coaching ---------- */
@@ -1948,9 +1956,10 @@ async function makeCoach(){
   const email=document.getElementById('mkEmail').value.trim(), titulo=document.getElementById('mkTitle').value.trim()||'Coach desportivo';
   const bio=document.getElementById('mkBio').value.split(',').map(s=>s.trim()).filter(Boolean);
   if(!email){ toast('Escreve o email da conta do coach'); return; }
-  const {data, error}=await sb.rpc('mov_tornar_coach',{p_email:email, p_titulo:titulo, p_bio:bio});
+  const principal=document.getElementById('mkPrincipal').checked;
+  const {data, error}=await sb.rpc('mov_tornar_coach',{p_email:email, p_titulo:titulo, p_bio:bio, p_principal:principal});
   if(error){ toast(error.message.includes('Não existe')?'Essa pessoa ainda não criou conta na app':'Erro: '+error.message); return; }
-  document.getElementById('mkResult').innerHTML=`Acesso de coach dado. Código para os atletas: <b>${esc(data)}</b>`;
+  document.getElementById('mkResult').innerHTML= principal ? `Feito. Este coach passa a acompanhar todos os atletas, os que já existem e os novos. Código (para atletas de outros coaches): <b>${esc(data)}</b>` : `Acesso de coach dado. Código para os atletas: <b>${esc(data)}</b>`;
 }
 
 /* ---------- conta ---------- */
@@ -1963,6 +1972,23 @@ async function doReset(){
   await logout();
 }
 
+
+/* ---------- moderação (coach principal e dona) ---------- */
+function chatHtml(m){
+  if(!m.chat.length) return `<p class="muted" style="margin:0 0 6px;">Ainda sem mensagens. Diz olá ao grupo!</p>`;
+  return m.chat.map(c=>`<div class="msg ${c.who==='me'?'out':'in'}">${c.who==='me'?'':`<div class="who">${esc(firstName(c.who))}</div>`}${esc(c.text)}${(IS_MOD||c.who==='me')&&c.id?`<button onclick="delMsg('${m.id}','${c.id}')" aria-label="Apagar mensagem" style="background:none;border:none;color:inherit;opacity:.6;font-size:11px;cursor:pointer;padding:2px 0 0;display:block;">apagar</button>`:''}</div>`).join('');
+}
+async function delMsg(meetId, msgId){
+  await q(sb.from('mov_mensagens').delete().eq('id',msgId));
+  const msgs=await q(sb.from('mov_mensagens').select('*').eq('encontro_id',meetId).order('created_at'));
+  const m=S.meets.find(x=>x.id===meetId); m.chat=msgs.map(x=>({id:x.id, who:mapId(x.user_id), text:x.texto}));
+  document.getElementById('chatBox').innerHTML=chatHtml(m); toast('Mensagem apagada');
+}
+let modPending=null;
+function modDeleteMeet(id){
+  if(modPending!==id){ modPending=id; toast('Toca outra vez para confirmar que apagas este encontro'); setTimeout(()=>{ if(modPending===id) modPending=null; },4000); return; }
+  modPending=null; cancelMeet(id);
+}
 /* ---------- (antigo) apagar ---------- */
 function askReset(){ document.getElementById('resetConfirm').hidden=false; }
 function doReset(){ try{ localStorage.removeItem(KEY); }catch(e){} S=null; location.reload(); }
